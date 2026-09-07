@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>输电运检每日工作汇总</title>
+<style>
+:root {
+  --blue: #1a73e8; --blue-d: #1557b0;
+  --bg: #f2f3f5; --card: #fff; --txt: #1a1a1a; --sub: #888; --line: #e8e8e8;
+  --red: #d93025; --green: #188038; --orange: #e37400;
+  --r: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg); color: var(--txt); font-size: 15px; line-height: 1.5;
+  padding-bottom: 40px; -webkit-text-size-adjust: 100%;
+}
+.top {
+  background: linear-gradient(135deg, #1a3a5c, #2a5a8c); color: #fff;
+  padding: 14px 18px; text-align: center; position: sticky; top: 0; z-index: 10;
+}
+.top h1 { font-size: 17px; font-weight: 600; }
+.top p  { font-size: 11px; opacity: 0.8; margin-top: 2px; }
+.wrap { max-width: 700px; margin: 0 auto; padding: 10px 14px; }
+.card {
+  background: var(--card); border-radius: var(--r); padding: 14px 16px;
+  margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+.card-hd {
+  font-size: 14px; font-weight: 600; color: #1a3a5c; margin-bottom: 10px;
+  display: flex; align-items: center; gap: 5px;
+}
+.card-hd .n { font-size: 11px; font-weight: 400; color: var(--sub); margin-left: auto; }
+
+/* form */
+.fg { margin-bottom: 10px; }
+.fg:last-child { margin-bottom: 0; }
+.fl { display: block; font-size: 12px; font-weight: 600; color: var(--sub); margin-bottom: 3px; }
+.fi, .ft, .fs {
+  width: 100%; padding: 9px 12px; border: 1.5px solid #ddd; border-radius: 8px;
+  font-size: 15px; font-family: inherit; background: #fafafa; -webkit-appearance: none;
+}
+.fi:focus, .ft:focus, .fs:focus { outline: none; border-color: var(--blue); background: #fff; }
+.ft { min-height: 160px; resize: vertical; line-height: 1.7; }
+.fs {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px;
+}
+
+/* row */
+.row { display: flex; gap: 8px; }
+.row > * { flex: 1; }
+
+/* section divider */
+.sec { border: 1.5px solid var(--line); border-radius: var(--r); padding: 10px 12px; margin-bottom: 10px; }
+.sec-hd { font-size: 13px; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
+.sec-hd .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.dot.yw { background: var(--blue); }
+.dot.jx { background: var(--orange); }
+
+/* btns */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+  padding: 10px 18px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600;
+  cursor: pointer; min-height: 42px; -webkit-tap-highlight-color: transparent; transition: all 0.15s;
+}
+.btn:active { transform: scale(0.97); }
+.btn1 { background: var(--blue); color: #fff; width: 100%; }
+.btn1:active { background: var(--blue-d); }
+.btn1.edit { background: var(--orange); }
+.btn2 { background: #fff; color: var(--blue); border: 1.5px solid var(--blue); }
+.btn3 { background: #fff; color: var(--red); border: 1.5px solid var(--red); padding: 5px 10px; font-size: 12px; min-height: 30px; }
+.btns { display: flex; gap: 8px; margin-top: 10px; }
+.btns .btn { flex: 1; }
+
+/* unit tags */
+.tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 4px; }
+.tag {
+  padding: 5px 10px; border-radius: 14px; font-size: 12px; border: 1.5px solid var(--line);
+  background: #fff; cursor: pointer; white-space: nowrap; -webkit-tap-highlight-color: transparent;
+  transition: all 0.15s;
+}
+.tag.on { background: var(--blue); color: #fff; border-color: var(--blue); }
+.tag.filled { background: #e6f4ea; color: var(--green); border-color: var(--green); }
+
+<!-- image styles removed -->
+
+
+/* entry list */
+.elist { max-height: 320px; overflow-y: auto; }
+.eitem { display: flex; align-items: flex-start; gap: 8px; padding: 9px 0; border-bottom: 1px solid #f0f0f0; }
+.eitem:last-child { border: none; }
+.ebody { flex: 1; min-width: 0; }
+.emeta { font-size: 12px; font-weight: 600; color: #1a3a5c; margin-bottom: 2px; }
+.edetail { font-size: 13px; color: #555; line-height: 1.6; }
+.edel { background: #f0f0f0; border: 1px solid #ddd; color: #d93025; font-size: 13px; font-weight: 600; cursor: pointer; padding: 8px 12px; flex-shrink: 0; min-width: 48px; min-height: 36px; border-radius: 6px; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+
+/* unit grid */
+.ugrid { display: flex; flex-wrap: wrap; gap: 4px; }
+.ubadge { font-size: 11px; padding: 3px 8px; border-radius: 10px; background: #f0f0f0; color: #999; }
+.ubadge.done { background: #e6f4ea; color: #188038; }
+
+/* summary & live */
+.sbox, .live-box {
+  background: #fafafa; border: 1px solid #e0e0e0; border-radius: var(--r);
+  padding: 14px; font-size: 14px; line-height: 1.8;
+  white-space: pre-wrap; word-break: break-all; max-height: 420px; overflow-y: auto;
+}
+.sbox.empty, .live-box.empty { color: #bbb; text-align: center; padding: 35px 14px; }
+.live-box { background: #fffef5; border-color: #e8e0c0; font-size: 13px; margin-top: 8px; }
+
+/* review panel */
+.review-box {
+  background: #fff; border: 1.5px solid #ddd; border-radius: var(--r);
+  padding: 10px 12px; font-size: 14px; line-height: 1.8;
+  width: 100%; min-height: 250px; resize: vertical; font-family: inherit;
+  -webkit-appearance: none;
+}
+.review-box:focus { outline: none; border-color: var(--blue); }
+.issues { margin-bottom: 8px; }
+.issue {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 12px; padding: 2px 8px; border-radius: 10px; margin: 2px 4px 2px 0;
+}
+.issue.warn { background: #fef7e0; color: #e37400; }
+.issue.err  { background: #fce8e6; color: #d93025; }
+.issue.ok   { background: #e6f4ea; color: #188038; }
+
+<!-- viewer styles removed -->
+
+
+/* toast */
+.toast {
+  position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%);
+  background: #333; color: #fff; padding: 8px 20px; border-radius: 18px;
+  font-size: 13px; z-index: 999; pointer-events: none; animation: tin 0.25s ease;
+}
+@keyframes tin { from { opacity: 0; transform: translateX(-50%) translateY(16px); } }
+.empty { text-align: center; padding: 24px; color: #bbb; }
+.empty .em { font-size: 32px; }
+
+/* embedded mode: hide inner header inside shell */
+body.embedded .top { display:none; }
+</style>
+</head>
+<body>
+<script>if(window.self!==window.top)document.body.classList.add("embedded");</script>
+
+
+<div class="top">
+  <h1>⚡ 输电运检每日工作汇总</h1>
+</div>
+
+<div class="wrap">
+
+<!-- ══ 日期 ══ -->
+<div class="card">
+  <div class="row">
+    <div class="fg">
+      <label class="fl">汇总日期</label>
+      <input type="date" class="fi" id="date" onchange="onDateChange()">
+    </div>
+  </div>
+</div>
+
+<!-- ══ 录入 ══ -->
+<div class="card">
+  <div class="card-hd">✍️ <span id="formTitle">添加单位报告</span></div>
+
+  <div class="fg" style="display:none;">
+    <label class="fl">报送单位</label>
+    <div class="tags" id="unitTags"></div>
+  </div>
+
+  <div class="row">
+    <div class="fg">
+      <label class="fl">运维计划项数</label>
+      <select class="fi" id="ywCount">
+        <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
+        <option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+        <option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option>
+        <option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option>
+        <option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option>
+        <option value="20">20</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label class="fl">检修计划项数</label>
+      <select class="fi" id="jxCount">
+        <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
+        <option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+        <option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option>
+        <option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option>
+        <option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option>
+        <option value="20">20</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="fg">
+    <label class="fl">📝 粘贴该单位工作内容（一整段）</label>
+    <button class="btn btn2" type="button" onclick="readClipboard()" style="margin-bottom:4px;width:100%;">📋 读取剪贴板（自动填入）</button>
+    <textarea class="ft" id="fullText" placeholder="直接粘贴县公司发来的整段报告文字...&#10;&#10;例如：&#10;运维计划4项，主要工作是：35东五线等精细化飞巡与红外测温；苏铁一二线保电特巡；先青二线等2条线路跨高铁视频加装。"></textarea>
+  </div>
+
+  <button class="btn btn1" id="btnSubmit" onclick="submitEntry()" style="margin-top:6px;">
+    ✅ 添加此单位报告
+  </button>
+  <button class="btn btn3" id="btnCancel" onclick="cancelEdit()" style="display:none;margin-top:6px;width:100%;">取消编辑</button>
+</div>
+
+<!-- ══ 已收集 ══ -->
+<div class="card">
+  <div class="card-hd">
+    📋 今日已收集
+    <span class="n" id="cnt">0个单位</span>
+    <span class="n" id="cntTot" style="margin-left:8px;"></span>
+  </div>
+  <div class="ugrid" id="ugrid"></div>
+  <div class="elist" id="elist" style="margin-top:8px;">
+    <div class="empty"><div class="em">📭</div>还没有记录</div>
+  </div>
+  <div style="margin-top:8px;display:flex;gap:6px;">
+    <button class="btn btn3" onclick="clearAll()" id="btnClr" style="display:none;">清空全部</button>
+  </div>
+</div>
+
+<!-- ══ 实时预览 ══ -->
+<div class="card">
+  <div class="card-hd">👁️ 实时预览</div>
+  <div class="live-box empty" id="liveBox">暂未填写内容</div>
+</div>
+
+<!-- ══ 正式输出 + 复核 ══ -->
+<div class="card">
+  <div class="card-hd">📄 生成公文</div>
+  <button class="btn btn1" onclick="genReview()" style="margin-bottom:10px;">📝 生成公文格式总结</button>
+
+  <!-- 复核结果 -->
+  <div id="reviewPanel" style="display:none;">
+    <div class="card-hd" style="margin-top:0;">🔍 语法标点复核 <span class="n" id="reviewCount"></span></div>
+    <div class="issues" id="issues"></div>
+    <textarea class="review-box" id="reviewBox" oninput="onReviewEdit()"></textarea>
+    <div class="btns">
+      <button class="btn btn2" onclick="autoFix()" id="btnFix" style="flex:1;">🔧 自动修复</button>
+      <button class="btn btn1" onclick="copyReview()" id="btnCopyRev" style="flex:2;">✅ 复核完毕，一键复制</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="toast" id="toast" style="display:none;"></div>
+
+<script>
+// ═════════════════════════════════
+// CONFIG
+// ═════════════════════════════════
+const UNITS = [
+  '输变电运检中心',
+  '仁寿公司',
+  '洪雅公司',
+  '彭山公司',
+  '丹棱公司',
+  '青神公司',
+  '多能公司',
+];
+const KEY = 'hz_v4';
+let entries = [];        // [{id, date, unit, ywCount, jxCount, content, ts}]
+let editingId = null;   // non-null = editing existing entry
+
+// ═════════════════════════════════
+// UNIT TAGS
+// ═════════════════════════════════
+function buildTags() {
+  const tags = document.getElementById('unitTags');
+  tags.innerHTML = UNITS.map(u =>
+    '<span class="tag" id="tag_' + u.replace(/\s/g,'') + '" onclick="selectUnit(\'' + u + '\')">' + u + '</span>'
+  ).join('');
+}
+buildTags();
+
+function refreshTags() {
+  const today = document.getElementById('date').value;
+  // Only mark as filled if user actually added content or non-zero counts
+  const filled = new Set(entries.filter(e =>
+    e.date === today && (e.content || e.ywCount > 0 || e.jxCount > 0)
+  ).map(e => e.unit));
+  UNITS.forEach(u => {
+    const tag = document.getElementById('tag_' + u.replace(/\s/g,''));
+    if (!tag) return;
+    tag.classList.remove('on', 'filled');
+    if (editingId && entries.find(e => e.id === editingId)?.unit === u) {
+      tag.classList.add('on');
+    } else if (filled.has(u)) {
+      tag.classList.add('filled');
+    }
+  });
+}
+
+function selectUnit(u) {
+  const today = document.getElementById('date').value;
+  let existing = entries.find(e => e.date === today && e.unit === u);
+  if (!existing) {
+    // Create new placeholder entry for this unit
+    existing = {
+      id: 'e_' + today + '_' + u.replace(/\s/g,''),
+      date: today, unit: u,
+      ywCount: 0, jxCount: 0,
+      content: '',
+      ts: Date.now()
+    };
+    entries.push(existing);
+    save();
+  }
+  loadEntry(existing);
+}
+
+function loadEntry(e) {
+  editingId = e.id;
+  document.getElementById('formTitle').textContent = '✏️ 编辑：' + e.unit;
+  document.getElementById('ywCount').value = e.ywCount || 0;
+  document.getElementById('jxCount').value = e.jxCount || 0;
+  document.getElementById('fullText').value = e.content || '';
+  const btn = document.getElementById('btnSubmit');
+  btn.textContent = '💾 更新此单位报告';
+  btn.classList.add('edit');
+  document.getElementById('btnCancel').style.display = 'block';
+  refreshTags();
+  document.getElementById('unitTags').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetForm(selUnit) {
+  editingId = null;
+  document.getElementById('formTitle').textContent = '✍️ 添加单位报告';
+  document.getElementById('ywCount').value = '0';
+  document.getElementById('jxCount').value = '0';
+  document.getElementById('fullText').value = '';
+  const btn = document.getElementById('btnSubmit');
+  btn.textContent = '✅ 添加此单位报告';
+  btn.classList.remove('edit');
+  document.getElementById('btnCancel').style.display = 'none';
+  if (selUnit) {
+    refreshTags();
+    // Mark the selected tag
+    const tag = document.getElementById('tag_' + selUnit.replace(/\s/g,''));
+    if (tag) tag.classList.add('on');
+  } else {
+    refreshTags();
+  }
+}
+
+function cancelEdit() {
+  resetForm(null);
+  toast('已取消编辑');
+}
+
+// ═════════════════════════════════
+// SUBMIT
+// ═════════════════════════════════
+async function submitEntry() {
+  const date = document.getElementById('date').value;
+  if (!date) { toast('请选择日期'); return; }
+  if (!editingId) { toast('请先粘贴文本，自动识别单位后再提交'); return; }
+
+  // If no unit from editingId (shouldn't happen), check
+  const entry = entries.find(e => e.id === editingId);
+  if (!entry) { toast('编辑状态异常，请重新选择'); return; }
+
+  const ywCount = parseInt(document.getElementById('ywCount').value) || 0;
+  const jxCount = parseInt(document.getElementById('jxCount').value) || 0;
+  const fullText = document.getElementById('fullText').value.trim();
+
+  if (ywCount === 0 && jxCount === 0) {
+    myConfirm('运维和检修均为0项，确认该单位今日无计划？', function(ok) {
+      if (ok) doSubmit(entry, ywCount, jxCount, fullText);
+    });
+    return;
+  }
+  if (((ywCount > 0) || (jxCount > 0)) && !fullText) {
+    toast('请粘贴工作内容');
+    return;
+  }
+
+  doSubmit(entry, ywCount, jxCount, fullText);
+}
+
+function doSubmit(entry, ywCount, jxCount, fullText) {
+  // Update entry
+  entry.ywCount = ywCount;
+  entry.jxCount = jxCount;
+  entry.content = fullText;
+  entry.ts = Date.now();
+
+  save(); resetForm(null); render(); updateLive();
+  toast('已更新 ' + entry.unit);
+}
+
+// ═════════════════════════════════
+// RENDER LIST
+// ═════════════════════════════════
+function render() {
+  const today = document.getElementById('date').value;
+  const todayEntries = entries.filter(e => e.date === today);
+  const list = document.getElementById('elist');
+  document.getElementById('cnt').textContent = todayEntries.length + '/7个单位';
+  const tY = todayEntries.reduce((s,e) => s + (e.ywCount || 0), 0);
+  const tJ = todayEntries.reduce((s,e) => s + (e.jxCount || 0), 0);
+  document.getElementById('cntTot').textContent = (todayEntries.length ? '｜合计：运维' + tY + '项、检修' + tJ + '项、共' + (tY + tJ) + '项' : '');
+
+  // Unit grid
+  const unitSet = new Set(todayEntries.map(e => e.unit));
+  document.getElementById('ugrid').innerHTML = UNITS.map(u => {
+    const cls = unitSet.has(u) ? 'ubadge done' : 'ubadge';
+    return '<span class="' + cls + '">' + u + '</span>';
+  }).join('');
+
+  if (!todayEntries.length) {
+    list.innerHTML = '<div class="empty"><div class="em">📭</div>还没有记录</div>';
+    document.getElementById('btnClr').style.display = 'none';
+    return;
+  }
+  document.getElementById('btnClr').style.display = 'inline-flex';
+
+  list.innerHTML = todayEntries.map(e => {
+    let parts = [];
+    if (e.ywCount > 0) parts.push('运维' + e.ywCount + '项');
+    if (e.jxCount > 0) parts.push('检修' + e.jxCount + '项');
+    if (!parts.length) parts.push('无计划');
+    let detail = e.content || '';
+
+    return '<div class="eitem">' +
+      '<div class="ebody" style="padding-right:4px;">' +
+        '<div class="emeta">' + esc(e.unit) + ' <span style="font-weight:400;color:var(--sub);">（点击标签重新编辑）</span></div>' +
+        '<div class="edetail">' + esc(parts.join('、') + '：' + detail) + '</div>' +
+      '</div>' +
+      '<a href="#" class="edel" data-act="del" data-eid="' + e.id + '" style="text-decoration:none;">删除</a></div>';
+  }).join('');
+
+  refreshTags();
+}
+
+function del(id) {
+  const entry = entries.find(e => e.id === id);
+  if (!entry) return;
+  // Save backup for undo
+  const bak = { yw: entry.ywCount, jx: entry.jxCount, c: entry.content };
+  entry.ywCount = 0;
+  entry.jxCount = 0;
+  entry.content = '';
+  if (editingId === id) {
+    document.getElementById('ywCount').value = '0';
+    document.getElementById('jxCount').value = '0';
+    document.getElementById('fullText').value = '';
+  }
+  save(); render(); updateLive();
+  // Undo button via toast
+  showUndo(id, bak);
+}
+
+function clearAll() {
+  myConfirm('确定要清空今天全部单位的报告吗？此操作可撤销。', function(ok) {
+    if (!ok) return;
+    const today = document.getElementById('date').value;
+    // Save backup for undo
+    const bak = entries.filter(e => e.date === today).map(e => ({ id: e.id, yw: e.ywCount, jx: e.jxCount, c: e.content }));
+    for (const e of entries) {
+      if (e.date === today) {
+        e.ywCount = 0; e.jxCount = 0; e.content = '';
+      }
+    }
+    resetForm(null);
+    save(); render(); updateLive();
+    document.getElementById('reviewPanel').style.display = 'none';
+    document.getElementById('reviewBox').value = '';
+    showUndoAll(today, bak);
+  });
+}
+
+function showUndo(id, bak) {
+  var t = document.getElementById('toast');
+  t.innerHTML = '已清空 <a href="#" id="undoLink" style="color:#fff;font-weight:700;">点此撤销</a>';
+  t.style.display = 'block';
+  clearTimeout(t._tid);
+  t._tid = setTimeout(function() { t.style.display = 'none'; }, 4000);
+  document.getElementById('undoLink').addEventListener('click', function(e) {
+    e.preventDefault();
+    var entry = entries.find(function(x) { return x.id === id; });
+    if (entry) { entry.ywCount = bak.yw; entry.jxCount = bak.jx; entry.content = bak.c; }
+    save(); render(); updateLive();
+    t.style.display = 'none';
+    toast('已撤销');
+  });
+}
+
+function showUndoAll(today, bak) {
+  var t = document.getElementById('toast');
+  t.innerHTML = '已全部清空 <a href="#" id="undoAllLink" style="color:#fff;font-weight:700;">点此撤销</a>';
+  t.style.display = 'block';
+  clearTimeout(t._tid);
+  t._tid = setTimeout(function() { t.style.display = 'none'; }, 4000);
+  document.getElementById('undoAllLink').addEventListener('click', function(e) {
+    e.preventDefault();
+    for (var b of bak) {
+      var entry = entries.find(function(x) { return x.id === b.id; });
+      if (entry) { entry.ywCount = b.yw; entry.jxCount = b.jx; entry.content = b.c; }
+    }
+    save(); render(); updateLive();
+    t.style.display = 'none';
+    toast('已撤销');
+  });
+}
+
+// ═════════════════════════════════
+// DATE CHANGE
+// ═════════════════════════════════
+function onDateChange() {
+  resetForm(null);
+  // Ensure units exist for the new date
+  const today = document.getElementById('date').value;
+  const todayEntries = entries.filter(e => e.date === today);
+  const todayUnits = new Set(todayEntries.map(e => e.unit));
+  for (const u of UNITS) {
+    if (!todayUnits.has(u)) {
+      entries.push({
+        id: 'e_' + today + '_' + u.replace(/\s/g,''),
+        date: today, unit: u,
+        ywCount: 0, jxCount: 0,
+        content: '',
+        ts: Date.now()
+      });
+    }
+  }
+  save();
+  render(); updateLive();
+  document.getElementById('reviewPanel').style.display = 'none';
+  document.getElementById('reviewBox').value = '';
+}
+
+// ═════════════════════════════════
+// CLIPBOARD READ: 一键读取剪贴板填入内容框
+// ═════════════════════════════════
+function readClipboard() {
+  var target = document.getElementById('fullText');
+  if (!target) return;
+  function fill(t) {
+    var v = (t || '').trim();
+    if (!v) { toast('剪贴板没有文本内容'); return; }
+    target.value = v;
+    target.dispatchEvent(new Event('input', { bubbles: true }));
+    toast('已自动填入剪贴板内容');
+  }
+  function tryRead(attempt) {
+    if (navigator.clipboard && navigator.clipboard.readText) {
+      navigator.clipboard.readText().then(fill).catch(function() {
+        if (attempt < 2) { setTimeout(function() { tryRead(attempt + 1); }, 300); }
+        else { fallbackClipboard(target); }
+      });
+    } else {
+      fallbackClipboard(target);
+    }
+  }
+  tryRead(0);
+}
+
+function fallbackClipboard(target) {
+  if (document.getElementById('clipOverlay')) return;
+  var ov = document.createElement('div');
+  ov.id = 'clipOverlay';
+  ov.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;';
+  var box = document.createElement('div');
+  box.style.cssText = 'background:#fff;border-radius:12px;padding:16px;width:86%;max-width:420px;box-sizing:border-box;';
+  var title = document.createElement('div');
+  title.textContent = '请粘贴内容（长按下方输入框 → 粘贴）';
+  title.style.cssText = 'font-weight:600;margin-bottom:8px;';
+  var ta = document.createElement('textarea');
+  ta.setAttribute('placeholder', '粘贴后自动填入并关闭');
+  ta.style.cssText = 'width:100%;min-height:120px;box-sizing:border-box;font-size:15px;';
+  var btn = document.createElement('button');
+  btn.textContent = '取消';
+  btn.className = 'btn btn3';
+  btn.style.cssText = 'margin-top:8px;width:100%;';
+  box.appendChild(title); box.appendChild(ta); box.appendChild(btn);
+  ov.appendChild(box); document.body.appendChild(ov);
+  ta.focus();
+  function close() {
+    if (ov.parentNode) ov.parentNode.removeChild(ov);
+    document.removeEventListener('paste', onPaste, true);
+  }
+  function onPaste(e) {
+    var text = (e.clipboardData ? e.clipboardData.getData('text/plain') : ta.value) || '';
+    if (e.preventDefault) e.preventDefault();
+    close();
+    var v = text.trim();
+    if (!v) { toast('未获取到文本内容'); return; }
+    target.value = v;
+    target.dispatchEvent(new Event('input', { bubbles: true }));
+    toast('已自动填入剪贴板内容');
+  }
+  document.addEventListener('paste', onPaste, true);
+  btn.onclick = close;
+  ta.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') close();
+  });
+  toast('此浏览器不能直接读取，请长按粘贴一次');
+}
+
+// ═════════════════════════════════
+// AUTO FILL: 从粘贴的文本自动识别 单位 / 运维项数 / 检修项数
+// ═════════════════════════════════
+var UNIT_PATTERNS = [
+  { u: '输变电运检中心', re: /输变电/ },
+  { u: '仁寿公司', re: /仁寿公司/ },
+  { u: '洪雅公司', re: /洪雅公司/ },
+  { u: '彭山公司', re: /彭山公司/ },
+  { u: '丹棱公司', re: /丹棱公司/ },
+  { u: '青神公司', re: /青神公司/ },
+  { u: '多能公司', re: /多能公司/ }
+];
+
+var JX_RE = /检修|基础回填|基础扎筋|基础支模|跨越架拆除|跨越架搭设|导地线更换|导地线展放|加装避雷器|避雷器加装|迁改|临时处置|抱杆提升|场地清理|封网|起地锚/;
+
+function detectUnit(text) {
+  for (var i = 0; i < UNIT_PATTERNS.length; i++) {
+    if (UNIT_PATTERNS[i].re.test(text)) return UNIT_PATTERNS[i].u;
+  }
+  return null;
+}
+
+function detectCounts(text) {
+  var yw = 0, jx = 0, secType = null;
+  var lines = text.split(/[\n\r]+/);
+  for (var i = 0; i < lines.length; i++) {
+    var ln = lines[i].trim();
+    if (!ln) continue;
+    if (/^[一二三四五六七八九十]+、/.test(ln)) {
+      secType = /检修/.test(ln) ? 'jx' : 'yw';
+      continue;
+    }
+    var im = ln.match(/^(\d+[.、．)）]|^[一二三四五六七八九十]是)/);
+    if (!im) continue;
+    var body = ln.slice(im[0].length);
+    var t = secType;
+    if (!t) t = (/检修/.test(body) || JX_RE.test(body)) ? 'jx' : 'yw';
+    if (t === 'jx') jx++; else yw++;
+  }
+  return { yw: yw, jx: jx };
+}
+
+var autoFillTimer = null;
+
+function autoFillFromText() {
+  var box = document.getElementById('fullText');
+  var text = (box.value || '').trim();
+  if (!text) return;
+  var today = document.getElementById('date').value;
+  if (!today) { toast('请先选择汇总日期'); return; }
+
+  var unit = detectUnit(text);
+  if (unit) {
+    var entry = entries.find(e => e.date === today && e.unit === unit);
+    var curUnit = editingId ? (entries.find(e => e.id === editingId) || {}).unit : null;
+    if (!entry) {
+      entry = { id: 'e_' + today + '_' + unit.replace(/\s/g,''), date: today, unit: unit, ywCount: 0, jxCount: 0, content: '', ts: Date.now() };
+      entries.push(entry);
+      save();
+    }
+    if (curUnit !== unit) {
+      var keep = box.value;
+      loadEntry(entry);
+      box.value = keep;
+    }
+    editingId = entry.id;
+    document.getElementById('formTitle').textContent = '✏️ 编辑：' + unit;
+    document.getElementById('btnSubmit').textContent = '💾 更新此单位报告';
+    document.getElementById('btnSubmit').classList.add('edit');
+    document.getElementById('btnCancel').style.display = 'block';
+  }
+
+  var c = detectCounts(text);
+  document.getElementById('ywCount').value = c.yw;
+  document.getElementById('jxCount').value = c.jx;
+
+  if (unit) {
+    var entry2 = entries.find(e => e.id === editingId);
+    if (entry2) { entry2.ywCount = c.yw; entry2.jxCount = c.jx; entry2.content = text; entry2.ts = Date.now(); save(); render(); updateLive(); }
+    toast('已识别 ' + unit + '：运维' + c.yw + '项、检修' + c.jx + '项（可手动改）');
+  } else {
+    toast('未识别到公司名称，请检查文本里是否含单位名');
+  }
+}
+
+document.getElementById('fullText').addEventListener('input', function() {
+  clearTimeout(autoFillTimer);
+  autoFillTimer = setTimeout(autoFillFromText, 400);
+});
+
+// ═════════════════════════════════
+// SIMPLE JOIN: split by numbered items, keep content unchanged, join with ；
+// ═════════════════════════════════
+function simpleJoinItems(text) {
+  if (!text || !text.trim()) return '';
+  var t = text.trim();
+
+  // Remove section headers (一、二、三、…)
+  t = t.replace(/^[一二三四五六七八九十]、[^\n]*[\n\r]+/gm, '');
+
+  // Remove date/company headers (with or without colon)
+  t = t.replace(/.{0,12}\d+月\d+日.{0,12}(?:工作|运维|检修|输电).{0,10}[：:]?\s*/g, '');
+  t = t.replace(/.{0,10}公司(?:今日|今天|今)(?:完成作业情况|完成工作|运维工作完成情况|输电工作完成情况|输电专业工作完成情况)[：:]?\s*/g, '');
+  t = t.replace(/.{0,10}公司\d+月\d+日[^\n]{0,20}[：:]?\s*/g, '');
+  t = t.replace(/\d+月\d+日工作完成情况[：:]?\s*/g, '');
+  t = t.replace(/.{0,6}工作完成情况[：:]?\s*/g, '');
+  t = t.replace(/.{0,10}公司\d+月\d+日完成情况[：:]?\s*/g, '');
+
+  // Split by numbered items (1. / 1、/ 1）etc.) → ；
+  // At start of text
+  t = t.replace(/^\s*\d+[.、．)）]\s*/g, '');
+  // After newlines
+  t = t.replace(/[\n\r]+\s*\d+[.、．)）]\s*/g, '；');
+  // Split by "一是""二是" → ；
+  t = t.replace(/[\n\r]+\s*[一二三四五六七八九十]是\s*/g, '；');
+  // Remaining newlines → ；
+  t = t.replace(/[\n\r]+/g, '；');
+
+  // Remove trailing 。 at each point end (e.g. “…飞巡。”→“…飞巡”)
+  t = t.replace(/。+\s*[；;]/g, '；');
+  t = t.replace(/。+\s*$/g, '');
+
+  // Clean up
+  t = t.replace(/^[；;，,\s]+/, '');
+  t = t.replace(/[；;，,\s]+$/, '');
+
+  // ── kV 修正：所有 KV/kv/Kv/kV 变体统一为 kV（如 220KV → 220kV）
+  t = t.replace(/(\d+)千伏/g, '$1kV');
+  t = t.replace(/(\d+)\s*[Kk][Vv]/g, '$1kV');
+
+  // ── # 后自动加小空格（如 1#一18#塔 → 1# 一18# 塔）
+  t = t.replace(/#(?=[^\s])/g, '# ');
+
+  return t;
+}
+
+// ═════════════════════════════════
+// BUILD SUMMARY
+// ═════════════════════════════════
+function buildSummary() {
+  const today = document.getElementById('date').value;
+  if (!today) return '请先选择日期';
+  const parts = today.split('-');
+  const dateStr = parseInt(parts[1]) + '月' + parseInt(parts[2]) + '日';
+
+  const todayEntries = entries.filter(e => e.date === today);
+
+  // Aggregate totals
+  let totalYw = 0, totalJx = 0;
+  const map = {};
+  for (const e of todayEntries) {
+    map[e.unit] = e;
+    totalYw += e.ywCount || 0;
+    totalJx += e.jxCount || 0;
+  }
+  const total = totalYw + totalJx;
+
+  // ── First line: date + totals
+  let out = '';
+  out += dateStr + '，输电专业运维检修计划' + total + '项';
+  if (totalYw > 0 && totalJx > 0) {
+    out += '，其中运维计划' + totalYw + '项、检修计划' + totalJx + '项';
+  } else if (totalYw > 0) {
+    out += '，均为运维计划';
+  } else if (totalJx > 0) {
+    out += '，均为检修计划';
+  } else {
+    out += '，各单位暂无计划安排';
+  }
+  out += '。\n';
+
+  // ── Per-unit entries
+  let idx = 1;
+  for (const u of UNITS) {
+    const e = map[u];
+    out += idx + '、' + u;
+
+    if (!e || !e.content || (e.ywCount === 0 && e.jxCount === 0 && !e.content.trim())) {
+      out += '：无运维检修计划。\n';
+    } else {
+      let descs = [];
+      if (e.ywCount > 0) descs.push('运维计划' + e.ywCount + '项');
+      if (e.jxCount > 0) descs.push('检修计划' + e.jxCount + '项');
+      // Connection word: 纯检修用"主要内容是"，否则用"主要工作是"
+      let conn = (e.jxCount > 0 && e.ywCount === 0) ? '，主要内容是：' : '，主要工作是：';
+
+      // Simple join: split by numbered items, keep content as-is
+      let content = (e.content || '').trim();
+      content = content.replace(/^主要工作是[：:]/, '').replace(/^主要内容是[：:]/, '');
+      content = simpleJoinItems(content);
+
+      if (!content) {
+        content = '无具体内容。';
+      }
+      content = content.replace(/。*$/, '。');
+      out += descs.join('，') + conn + content + '\n';
+    }
+    idx++;
+  }
+
+  return out;
+}
+
+// ═════════════════════════════════
+// REVIEW ENGINE
+// ═════════════════════════════════
+function runChecks(text) {
+  const issues = [];
+
+  // 1. English punctuation in Chinese text
+  if (/[^0-9],(?!\d)/.test(text)) issues.push({ t:'warn', m:'疑似英文逗号 , 应为中文逗号 ，' });
+  if(/[^0-9]\.(?=\s|$|\n)/.test(text) && !/项\./.test(text)) issues.push({ t:'warn', m:'疑似英文句号 . 应为中文句号 。' });
+  if(/;(?!\s*\d)/.test(text)) issues.push({ t:'warn', m:'疑似英文分号 ; 应为中文分号 ；' });
+
+  // 2. Double punctuation
+  if(/。。/.test(text)) issues.push({ t:'err', m:'发现双句号 。。' });
+  if(/；；/.test(text)) issues.push({ t:'err', m:'发现双分号 ；；' });
+  if(/，，/.test(text)) issues.push({ t:'err', m:'发现双逗号 ，，' });
+
+  // 3. Missing period at end of per-unit lines
+  const lines = text.split('\n').filter(l => l.trim());
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i].trim();
+    if (l.length > 10 && !/[。！？」』」]$/.test(l) && !/：$/.test(l) && !/\d$/.test(l)) {
+      if (!/^[\d一二三四五六七八九十]/.test(l) && !/╌/.test(l)) {
+        issues.push({ t:'warn', m:'第'+(i+1)+'行可能缺少句号：' + l.slice(0,20) + '...' });
+      }
+    }
+  }
+
+  // 4. Check numbering consistency
+  let prevNum = 0;
+  for (const l of lines) {
+    const m = l.match(/^(\d+)、/);
+    if (m) {
+      const n = parseInt(m[1]);
+      if (n !== prevNum + 1 && prevNum > 0) {
+        issues.push({ t:'err', m:'序号跳跃：' + prevNum + '→' + n + '，可能遗漏' });
+      }
+      prevNum = n;
+    }
+  }
+
+  // 5. Template required elements
+  if (!/输电专业/.test(text)) issues.push({ t:'warn', m:'第一行应包含"输电专业运维检修计划"' });
+  if (!/其中运维计划.*检修计划/.test(text) && !/均为运维计划/.test(text) && !/均为检修计划/.test(text)) {
+    if (/检修计划\d+项/.test(text) && /运维计划\d+项/.test(text)) {
+      issues.push({ t:'warn', m:'应注明"其中运维计划X项、检修计划X项"' });
+    }
+  }
+
+  // 6. Unit count check - list missing units
+  if (!/无运维检修计划/.test(text)) {
+    const unitMatches = text.match(/\d+、(\S+?)(?:运维|检修|：)/g) || [];
+    const foundUnits = unitMatches.map(m => m.replace(/^\d+、/, '').replace(/(?:运维|检修|：).*$/, ''));
+    const missingUnits = UNITS.filter(u => !foundUnits.some(fu => u.indexOf(fu) >= 0 || fu.indexOf(u) >= 0));
+    if (missingUnits.length > 0) {
+      issues.push({ t:'err', m:'缺少单位：' + missingUnits.join('、') });
+    }
+    // Also check total count
+    const unitCount = (text.match(/\d+、/g) || []).length;
+    if (unitCount < 7) issues.push({ t:'warn', m:'只找到' + unitCount + '个单位编号，应有7个' });
+  }
+
+  // 7. Empty content check
+  if (/主要工作是：\s*[。；;]/.test(text)) issues.push({ t:'err', m:'"主要工作是："后内容为空' });
+  if (/主要内容是：\s*[。；;]/.test(text)) issues.push({ t:'err', m:'"主要内容是："后内容为空' });
+
+  // 8. 【新增】检测残留的杆塔号
+  if (/\d+#/.test(text)) issues.push({ t:'warn', m:'可能残留杆塔号（#号）' });
+
+  // 9. 【新增】检测残留的英文标点
+  if (/[一-鿿]\s*,\s*[一-鿿]/.test(text)) issues.push({ t:'warn', m:'中文文本中出现英文逗号' });
+
+  // 10. 【新增】检测未处理的中式编号
+  if (/[一二三四五六七八九十]、/.test(text)) {
+    issues.push({ t:'warn', m:'可能残留中式章节标题（一、二、…）' });
+  }
+
+  // Final: OK if no issues
+  if (!issues.length) {
+    issues.push({ t:'ok', m:'未发现明显语法标点问题 ✓' });
+  }
+
+  return issues;
+}
+
+// ── Smart merge: globally group same work type, then "A线等N条线路workType"
+function mergeLines(text) {
+  let parts = text.split(/[；;]/).map(p => p.trim()).filter(p => p);
+  if (parts.length <= 1) return text;
+
+  // Step 1: parse each part into { lines[], workType }
+  let items = [];
+  for (let p of parts) {
+    let r = countLinesInPart(p);
+    if (r.count > 0) {
+      items.push({ lines: r.allLines, count: r.count, firstLine: r.firstLine, work: cleanWork(r.workDesc) });
+    } else {
+      items.push({ lines: [], count: 0, firstLine: '', work: p, raw: p });
+    }
+  }
+
+  // Step 2: global merge - group items with identical work type
+  let groups = [];
+  let used = new Set();
+  for (let i = 0; i < items.length; i++) {
+    if (used.has(i)) continue;
+    let item = items[i];
+    if (item.count === 0) { groups.push(item); used.add(i); continue; }
+    let allLines = [...item.lines];
+    let firstLine = item.firstLine;
+    for (let j = i+1; j < items.length; j++) {
+      if (used.has(j)) continue;
+      if (items[j].count > 0 && sameWork(item.work, items[j].work)) {
+        allLines = allLines.concat(items[j].lines);
+        used.add(j);
+      }
+    }
+    used.add(i);
+    // Deduplicate lines
+    allLines = [...new Set(allLines)];
+    groups.push({ count: allLines.length, firstLine: firstLine, work: item.work });
+  }
+
+  // Step 3: format output
+  let out = [];
+  for (let g of groups) {
+    if (g.raw) { out.push(g.raw); }
+    else if (g.count === 1) { out.push(g.firstLine + g.work); }
+    else { out.push(g.firstLine + '等' + g.count + '条线路' + g.work); }
+  }
+  return out.join('；');
+}
+
+// Common work type suffixes to help identify end of line names
+// Sorted by length descending for greedy matching
+var WORK_TYPES = [
+  // 巡视类
+  '可视化常规巡视及外破点监控巡视',
+  '电网风险保电特殊巡视',
+  '特殊区段震后特巡',
+  '电缆隧道雨后特巡',
+  '特殊巡视', '常规巡视', '震后特殊巡视', '三跨巡视',
+  '保电特巡', '外破特巡', '外破蹲守', '雨后特巡',
+  '故障特巡', '特殊巡视',
+  '可视化巡视', '外破点位可视化巡视', '外破监控',
+  '外破点位特巡',
+  // 飞巡类
+  '无人机精细化飞巡', '无人机可见光故障排查',
+  '精细化飞巡', '自主飞巡', '故障飞巡',
+  '飞巡', '故障排查', '可见光故障排查',
+  // 检测/扫描
+  '热成像及声控成像检测', '激光雷达扫描', '激光扫描',
+  '无人机红外测温', '无人机红外',
+  '红外测温', '接地测试', '接地检测', '数据分析',
+  // 通道/接地/清障
+  '通道处理', '接地整治', '接地网整治', '接地治理',
+  '清障砍伐', '清障',
+  // 加装/改造
+  '安装在线视频装置', '安装视频装置', '视频加装',
+  '避雷器加装', '加装避雷器',
+  '导轨安装', '导轨、避雷器安装',
+  // 检修/工程类
+  '电缆沟盖板消缺', '导地线更换',
+  '悬垂线夹更换',
+  '跨越架拆除', '场地清理',
+  '基础回填', '基础扎筋', '基础支模',
+  '线路迁改', '迁改工程', '跨越架搭设',
+  '抱杆提升', '导地线展放', '展放',
+  '跨高速封网', '跨高速断道封网',
+  '起地锚', '临时处置',
+  // 消缺/验收/其他
+  '隐患处理', '验收', '消缺',
+  '抽水', '异物隐患',
+  '引流线安装',
+];
+
+// ── Expand compound line names: 铁镇一二线 → ['铁镇一线','铁镇二线']
+function expandLines(name) {
+  // Match: prefix + Chinese digit + Chinese digit + 线
+  // e.g., 铁镇一二线, 青白三四线
+  var cnDigits = '一二三四五六七八九十';
+  var re = new RegExp('^(\\S+?)([' + cnDigits + '])([' + cnDigits + '])(线)$');
+  var m = name.match(re);
+  if (m && m[2] !== m[3]) {
+    return [m[1] + m[2] + m[4], m[1] + m[3] + m[4]];
+  }
+  // Check for single digit prefix like 东平一线, 江东二线
+  var re2 = /^(\S+?)([一二三四五六七八九十])(线)$/;
+  var m2 = name.match(re2);
+  if (m2) {
+    return [name]; // not compound, just one line
+  }
+  return [name];
+}
+
+// Given a list of line names, expand compounds and deduplicate
+function expandAndDedup(lines) {
+  var result = [];
+  var seen = new Set();
+  for (var i = 0; i < lines.length; i++) {
+    var expanded = expandLines(lines[i]);
+    for (var j = 0; j < expanded.length; j++) {
+      if (!seen.has(expanded[j])) {
+        seen.add(expanded[j]);
+        result.push(expanded[j]);
+      }
+    }
+  }
+  return result;
+}
+
+// ── Test if a string looks like a valid line name (not a description phrase)
+function isLineName(s) {
+  if (!s || s.length < 2 || s.length > 20) return false;
+  // Must end with 线
+  if (!/线$/.test(s)) return false;
+  // Exclude common false positives
+  var exclude = /^(等\d+条线路|线路巡视|线路通道|线路运行|线路迁改|输电线路|停运|单线|导地线|地线)/;
+  if (exclude.test(s)) return false;
+  // Must contain Chinese characters (or kV prefix with Chinese)
+  if (!/[一-鿿]/.test(s) && !/\d+kV/i.test(s)) return false;
+  // Allow 及 (e.g., 文青线及桂林支线), 支线, 进线 as part of compound names
+  return true;
+}
+
+function countLinesInPart(p) {
+  let lines = [];
+  let firstLine = '';
+  let after = p;
+
+  // ── Step 1: find the first line name (with or without kV prefix)
+  // Use [^、，,；;\s] to avoid greedy match crossing separators
+  let fm = p.match(/(\d+kV[^、，,；;\s]{1,12}线)/);
+  if (!fm) {
+    // Try bare line name: non-kV prefixed, 2-8 chars before 线 that looks like a name
+    fm = p.match(/([一-鿿A-Za-z0-9][^、，,；;\s]{1,10}线)/);
+  }
+  if (!fm) return { count: 0, firstLine: '', workDesc: p, allLines: [] };
+
+  firstLine = fm[1];
+  if (isLineName(firstLine)) {
+    lines.push(firstLine);
+  }
+  after = p.substring(fm.index + fm[0].length);
+
+  // ── Step 2: find the earliest matching work type
+  let workDesc = '';
+  let workMatch = null;
+  for (let wi = 0; wi < WORK_TYPES.length; wi++) {
+    let wt = WORK_TYPES[wi];
+    let idx = after.indexOf(wt);
+    if (idx >= 0 && (workMatch === null || idx < workMatch.idx)) {
+      workMatch = { idx: idx, text: wt };
+    }
+  }
+  if (workMatch) {
+    // Everything before the work type is potential line names
+    let linePart = after.substring(0, workMatch.idx);
+    workDesc = after.substring(workMatch.idx);
+    // ── Parse line names from linePart
+    // Split by common separators
+    let segs = linePart.split(/[、，,]+/);
+    for (let si = 0; si < segs.length; si++) {
+      let s = segs[si].trim();
+      if (!s) continue;
+      // Strip leading 完成/开展 prefix
+      s = s.replace(/^(?:完成|开展|进行|实施|及|对)/, '');
+      // Strip trailing descriptors
+      s = s.replace(/等线路$/, '').replace(/等$/, '').replace(/等\d+条线路$/, '');
+      s = s.replace(/进线$/, '');
+      if (!s) continue;
+      // Try kV-prefixed line (exclude separators)
+      let km = s.match(/(\d+kV[^、，,；;\s]{1,12}线)/);
+      if (km) {
+        if (!lines.includes(km[1])) lines.push(km[1]);
+        continue;
+      }
+      // Try bare line name
+      if (isLineName(s) && !lines.includes(s)) {
+        lines.push(s);
+      }
+    }
+  } else {
+    // ── Fallback: no known work type found, try to extract line names from entire after string
+    // Find all kV-prefixed lines
+    let reKv = /(\d+kV[^、，,；;\s]{1,12}线)/g;
+    let mKv;
+    while ((mKv = reKv.exec(after)) !== null) {
+      if (!lines.includes(mKv[1])) lines.push(mKv[1]);
+    }
+    // Find all bare line names
+    let reBare = /([一-鿿A-Za-z\d]{2,8}线)/g;
+    let mBare;
+    while ((mBare = reBare.exec(after)) !== null) {
+      let cand = mBare[1];
+      if (isLineName(cand) && !lines.includes(cand)) {
+        lines.push(cand);
+      }
+    }
+    // The remainder is the work description
+    if (lines.length > 0) {
+      let lastLine = lines[lines.length - 1];
+      let lastIdx = after.lastIndexOf(lastLine);
+      workDesc = after.substring(lastIdx + lastLine.length).replace(/^[、，,\s]+/, '');
+    } else {
+      workDesc = after;
+    }
+  }
+
+  // ── Step 3: expand compound names and dedup
+  let allLines = expandAndDedup(lines);
+  if (allLines.length > 0 && !firstLine) {
+    firstLine = allLines[0];
+  }
+  return { count: allLines.length, firstLine: allLines[0] || firstLine, workDesc: workDesc, allLines: allLines };
+}
+
+function cleanWork(s) {
+  return s.replace(/^(?:完成|开展|进行|实施|已完成|停运|对|全线|今日新建)/g, '')
+          .replace(/[\d]+#[、，,\s]*/g, '')
+          .replace(/[\d]+号[塔杆]?[、，,\s]*/g, '')
+          .trim();
+}
+
+function sameWork(a, b) {
+  // Normalize for comparison: strip prefixes, strip trailing quantities (X基, X处, X条)
+  var norm = function(s) {
+    return cleanWork(s)
+      .replace(/\d+基\s*$/g, '')
+      .replace(/\d+处\s*$/g, '')
+      .replace(/\d+条\s*$/g, '')
+      .replace(/\d+根\s*$/g, '')
+      .replace(/\d+㎡\s*$/g, '')
+      .replace(/树\d+根/g, '')
+      .replace(/竹子\d+㎡/g, '')
+      .replace(/完成\d+%/g, '')
+      .replace(/^\s+|\s+$/g, '');
+  };
+  var na = norm(a);
+  var nb = norm(b);
+  // Exact match only — no modifier stripping
+  return na && nb && na === nb;
+}
+
+function autoFixText(text) {
+  var t = text;
+
+  // ── kV 修正：所有 KV/kv/Kv/kV 变体统一为 kV（如 220KV → 220kV）
+  t = t.replace(/(\d+)千伏/g, '$1kV');
+  t = t.replace(/(\d+)\s*[Kk][Vv]/g, '$1kV');
+
+  // ── 标点符号标准化
+  t = t.replace(/。。/g, '。');
+  t = t.replace(/；；+/g, '；');
+  t = t.replace(/，，+/g, '，');
+  t = t.replace(/([^\dA-Za-z]),/g, '$1，');
+  t = t.replace(/([^\dA-Za-z]);/g, '$1；');
+  t = t.replace(/([一-鿿])\./g, '$1。');
+  t = t.replace(/：；/g, '：');
+  t = t.replace(/；。/g, '。');
+  t = t.replace(/：[；;，,]/g, '：');
+
+  // ── 常见错别字
+  t = t.replace(/精细化飞训/g, '精细化飞巡');
+
+  // ── # 后自动加小空格（如 1#一18#塔 → 1# 一18# 塔）
+  t = t.replace(/#(?=[^\s])/g, '# ');
+
+  // ── 清理首尾多余标点
+  t = t.replace(/^[；;，,、\s]+/, '');
+  t = t.replace(/[；;，,、\s]+$/, '');
+
+  return t;
+}
+
+// ═════════════════════════════════
+// LIVE + REVIEW + COPY
+// ═════════════════════════════════
+function updateLive() {
+  const box = document.getElementById('liveBox');
+  const today = document.getElementById('date').value;
+  if (!today || !entries.filter(e => e.date === today).length) {
+    box.textContent = '暂未填写内容';
+    box.classList.add('empty');
+    return;
+  }
+  box.textContent = buildSummary();
+  box.classList.remove('empty');
+}
+
+function genReview() {
+  const today = document.getElementById('date').value;
+  if (!today) { toast('请选择日期'); return; }
+  if (!entries.filter(e => e.date === today).length) { toast('今天还没有记录，请先添加单位报告'); return; }
+
+  const text = buildSummary();
+  const panel = document.getElementById('reviewPanel');
+  const reviewBox = document.getElementById('reviewBox');
+  const issuesDiv = document.getElementById('issues');
+
+  reviewBox.value = text;
+  panel.style.display = 'block';
+
+  // Run checks
+  const issues = runChecks(text);
+  issuesDiv.innerHTML = issues.map(i =>
+    '<span class="issue ' + i.t + '">' + (i.t==='err'?'❌':i.t==='warn'?'⚠️':'✅') + ' ' + i.m + '</span>'
+  ).join('');
+
+  const errs = issues.filter(i => i.t === 'err').length;
+  const warns = issues.filter(i => i.t === 'warn').length;
+  const oks = issues.filter(i => i.t === 'ok').length;
+  let countText = '';
+  if (errs > 0) countText = errs + '个错误';
+  if (warns > 0) countText += (countText?'，':'') + warns + '个提醒';
+  if (!countText) countText = '通过';
+  document.getElementById('reviewCount').textContent = countText;
+
+  document.getElementById('btnCopyRev').disabled = false;
+  document.getElementById('btnFix').style.display = (errs > 0 || warns > 0) ? 'flex' : 'none';
+
+  panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  toast('公文已生成，请复核');
+}
+
+function onReviewEdit() {
+  const text = document.getElementById('reviewBox').value;
+  const issues = runChecks(text);
+  document.getElementById('issues').innerHTML = issues.map(i =>
+    '<span class="issue ' + i.t + '">' + (i.t==='err'?'❌':i.t==='warn'?'⚠️':'✅') + ' ' + i.m + '</span>'
+  ).join('');
+  const errs = issues.filter(i => i.t === 'err').length;
+  document.getElementById('btnCopyRev').disabled = false;
+  document.getElementById('btnFix').style.display = (errs > 0 || issues.filter(i => i.t === 'warn').length > 0) ? 'flex' : 'none';
+}
+
+function autoFix() {
+  const reviewBox = document.getElementById('reviewBox');
+  const fixed = autoFixText(reviewBox.value);
+  reviewBox.value = fixed;
+  onReviewEdit();
+  toast('已自动修复');
+}
+
+function copyReview() {
+  const box = document.getElementById('reviewBox');
+  const t = box.value;
+  if (!t) { toast('请先生成公文'); return; }
+  const issues = runChecks(t);
+  const errs = issues.filter(i => i.t === 'err').length;
+  const doCopy = function() {
+    // Method 1: Clipboard API
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(t).then(function() {
+        toast('已复制到剪贴板');
+      }).catch(function() {
+        selectAndCopy(box, t);
+      });
+      return;
+    }
+    selectAndCopy(box, t);
+  };
+  if (errs > 0) {
+    myConfirm('还有' + errs + '个错误未修复，确定直接复制吗？', function(ok) {
+      if (ok) doCopy();
+    });
+    return;
+  }
+  doCopy();
+}
+
+function selectAndCopy(box, t) {
+  // Method 2: Select text in existing textarea & execCommand
+  box.focus();
+  box.select();
+  box.setSelectionRange(0, 999999);
+  try {
+    if (document.execCommand('copy')) {
+      toast('已复制到剪贴板');
+      return;
+    }
+  } catch(e) {}
+  // Method 3: Let iOS show the copy popup naturally
+  // Text is already selected in the reviewBox, user just taps "拷贝"
+  toast('已选中文字，请轻点弹出菜单选"拷贝"');
+}
+
+// ═════════════════════════════════
+// STORAGE & UTILS
+// ═════════════════════════════════
+function load() {
+  try { const s = localStorage.getItem(KEY); if (s) entries = JSON.parse(s); } catch(e) { entries = []; }
+  // Migrate old data format
+  for (const e of entries) {
+    if (!('content' in e) && ('ywContent' in e || 'jxContent' in e)) {
+      e.content = (e.ywContent || '') + (e.jxContent ? '；检修内容：' + e.jxContent : '');
+    }
+  }
+}
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(entries)); } catch(e) { toast('存储空间不足'); }
+}
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function toast(m) {
+  const t = document.getElementById('toast');
+  t.textContent = m; t.style.display = 'block';
+  clearTimeout(t._tid); t._tid = setTimeout(() => t.style.display = 'none', 1800);
+}
+
+// ═════════════════════════════════
+// MY CONFIRM: 页面内自定义确认框（避免手机浏览器 confirm 失效）
+// ═════════════════════════════════
+function myConfirm(message, onOk) {
+  if (document.getElementById('confirmOverlay')) return;
+  var ov = document.createElement('div');
+  ov.id = 'confirmOverlay';
+  ov.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;';
+  var box = document.createElement('div');
+  box.style.cssText = 'background:#fff;border-radius:12px;padding:18px;width:80%;max-width:360px;box-sizing:border-box;text-align:center;';
+  var msg = document.createElement('div');
+  msg.textContent = message;
+  msg.style.cssText = 'margin-bottom:14px;line-height:1.5;';
+  var row = document.createElement('div');
+  row.style.cssText = 'display:flex;gap:8px;';
+  var no = document.createElement('button');
+  no.textContent = '取消'; no.className = 'btn btn3'; no.style.cssText = 'flex:1;';
+  var yes = document.createElement('button');
+  yes.textContent = '确定'; yes.className = 'btn btn1'; yes.style.cssText = 'flex:1;';
+  row.appendChild(no); row.appendChild(yes);
+  box.appendChild(msg); box.appendChild(row);
+  ov.appendChild(box); document.body.appendChild(ov);
+  function close() { if (ov.parentNode) ov.parentNode.removeChild(ov); }
+  no.onclick = function() { close(); };
+  yes.onclick = function() { close(); if (onOk) onOk(true); };
+}
+
+// ═════════════════════════════════
+// INIT
+// ═════════════════════════════════
+(function() {
+  const today = new Date().toISOString().slice(0,10);
+  document.getElementById('date').value = today;
+  // Clean old version caches
+  try { localStorage.removeItem('hz_entries_v2'); } catch(e) {}
+  try { localStorage.removeItem('hz_v3'); } catch(e) {}
+  load();
+  // Ensure all 7 units have entries for today so user can click any to edit
+  const todayEntries = entries.filter(e => e.date === today);
+  const todayUnits = new Set(todayEntries.map(e => e.unit));
+  for (const u of UNITS) {
+    if (!todayUnits.has(u)) {
+      entries.push({
+        id: 'e_' + today + '_' + u.replace(/\s/g,''),
+        date: today, unit: u,
+        ywCount: 0, jxCount: 0,
+        content: '',
+        ts: Date.now()
+      });
+    }
+  }
+  save();
+  render(); updateLive();
+  // Event delegation for entry list (handles delete + view image)
+  var elist = document.getElementById('elist');
+  elist.addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-act]');
+    if (!btn) return;
+    e.preventDefault();
+    var act = btn.getAttribute('data-act');
+    var eid = btn.getAttribute('data-eid');
+    if (act === 'del') del(eid);
+  });
+  elist.addEventListener('touchstart', function(e) {
+    var btn = e.target.closest('[data-act]');
+    if (!btn) return;
+    e.preventDefault();
+    var act = btn.getAttribute('data-act');
+    var eid = btn.getAttribute('data-eid');
+    if (act === 'del') { del(eid); return; }
+  }, {passive: false});
+  // Clear all button
+  var btnClr = document.getElementById('btnClr');
+  btnClr.addEventListener('click', function(e) { e.preventDefault(); clearAll(); });
+  btnClr.addEventListener('touchstart', function(e) { e.preventDefault(); clearAll(); }, {passive: false});
+
+  setInterval(save, 5000);
+  window.addEventListener('beforeunload', save);
+})();
+</script>
+</body>
+</html>
