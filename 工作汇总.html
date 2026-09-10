@@ -270,6 +270,7 @@ const UNITS = [
 const KEY = 'hz_v4';
 let entries = [];        // [{id, date, unit, ywCount, jxCount, content, ts}]
 let editingId = null;   // non-null = editing existing entry
+let manualCounts = false; // true = user manually set 运维/检修 counts; don't auto-overwrite
 
 // ═════════════════════════════════
 // UNIT TAGS
@@ -320,6 +321,7 @@ function selectUnit(u) {
 
 function loadEntry(e) {
   editingId = e.id;
+  manualCounts = false;
   document.getElementById('formTitle').textContent = '✏️ 编辑：' + e.unit;
   document.getElementById('ywCount').value = e.ywCount || 0;
   document.getElementById('jxCount').value = e.jxCount || 0;
@@ -334,6 +336,7 @@ function loadEntry(e) {
 
 function resetForm(selUnit) {
   editingId = null;
+  manualCounts = false;
   document.getElementById('formTitle').textContent = '✍️ 添加单位报告';
   document.getElementById('ywCount').value = '0';
   document.getElementById('jxCount').value = '0';
@@ -405,7 +408,8 @@ function render() {
   const today = document.getElementById('date').value;
   const todayEntries = entries.filter(e => e.date === today);
   const list = document.getElementById('elist');
-  document.getElementById('cnt').textContent = todayEntries.length + '/7个单位';
+  const filledEntries = todayEntries.filter(e => e.content || e.ywCount > 0 || e.jxCount > 0);
+  document.getElementById('cnt').textContent = filledEntries.length + '/7个单位';
   const tY = todayEntries.reduce((s,e) => s + (e.ywCount || 0), 0);
   const tJ = todayEntries.reduce((s,e) => s + (e.jxCount || 0), 0);
   document.getElementById('cntTot').textContent = (todayEntries.length ? '｜合计：运维' + tY + '项、检修' + tJ + '项、共' + (tY + tJ) + '项' : '');
@@ -680,13 +684,18 @@ function autoFillFromText() {
   }
 
   var c = detectCounts(text);
-  document.getElementById('ywCount').value = c.yw;
-  document.getElementById('jxCount').value = c.jx;
+  if (!manualCounts) {
+    document.getElementById('ywCount').value = c.yw;
+    document.getElementById('jxCount').value = c.jx;
+  }
 
   if (unit) {
     var entry2 = entries.find(e => e.id === editingId);
-    if (entry2) { entry2.ywCount = c.yw; entry2.jxCount = c.jx; entry2.content = text; entry2.ts = Date.now(); save(); render(); updateLive(); }
-    toast('已识别 ' + unit + '：运维' + c.yw + '项、检修' + c.jx + '项（可手动改）');
+    if (entry2) {
+      if (!manualCounts) { entry2.ywCount = c.yw; entry2.jxCount = c.jx; }
+      entry2.content = text; entry2.ts = Date.now(); save(); render(); updateLive();
+    }
+    toast(manualCounts ? ('已更新 ' + unit + '（数量保持手动设置）') : ('已识别 ' + unit + '：运维' + c.yw + '项、检修' + c.jx + '项（可手动改）'));
   } else {
     toast('未识别到公司名称，请检查文本里是否含单位名');
   }
@@ -695,6 +704,21 @@ function autoFillFromText() {
 document.getElementById('fullText').addEventListener('input', function() {
   clearTimeout(autoFillTimer);
   autoFillTimer = setTimeout(autoFillFromText, 400);
+});
+document.getElementById('fullText').addEventListener('paste', function() { manualCounts = false; });
+document.getElementById('ywCount').addEventListener('change', function() {
+  manualCounts = true;
+  if (editingId) {
+    var entry = entries.find(e => e.id === editingId);
+    if (entry) { entry.ywCount = parseInt(this.value) || 0; entry.ts = Date.now(); save(); render(); }
+  }
+});
+document.getElementById('jxCount').addEventListener('change', function() {
+  manualCounts = true;
+  if (editingId) {
+    var entry = entries.find(e => e.id === editingId);
+    if (entry) { entry.jxCount = parseInt(this.value) || 0; entry.ts = Date.now(); save(); render(); }
+  }
 });
 
 // ═════════════════════════════════
