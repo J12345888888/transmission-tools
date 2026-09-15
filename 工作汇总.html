@@ -101,6 +101,7 @@ body {
 .ugrid { display: flex; flex-wrap: wrap; gap: 4px; }
 .ubadge { font-size: 11px; padding: 3px 8px; border-radius: 10px; background: #f0f0f0; color: #999; }
 .ubadge.done { background: #e6f4ea; color: #188038; }
+.pending { font-size: 12px; color: var(--sub); margin-top: 8px; }
 
 /* summary & live */
 .sbox, .live-box {
@@ -219,6 +220,7 @@ body.embedded .top { display:none; }
     <span class="n" id="cntTot" style="margin-left:8px;"></span>
   </div>
   <div class="ugrid" id="ugrid"></div>
+  <div class="pending" id="pendingList"></div>
   <div class="elist" id="elist" style="margin-top:8px;">
     <div class="empty"><div class="em">📭</div>还没有记录</div>
   </div>
@@ -259,7 +261,7 @@ body.embedded .top { display:none; }
 // CONFIG
 // ═════════════════════════════════
 const UNITS = [
-  '输变电运检中心',
+  '输电运检中心',
   '仁寿公司',
   '洪雅公司',
   '彭山公司',
@@ -414,12 +416,15 @@ function render() {
   const tJ = todayEntries.reduce((s,e) => s + (e.jxCount || 0), 0);
   document.getElementById('cntTot').textContent = (todayEntries.length ? '｜合计：运维' + tY + '项、检修' + tJ + '项、共' + (tY + tJ) + '项' : '');
 
-  // Unit grid
-  const unitSet = new Set(todayEntries.map(e => e.unit));
+  // Unit grid: green only for actually-filled units
+  const filledUnits = new Set(todayEntries.filter(e => e.content || e.ywCount > 0 || e.jxCount > 0).map(e => e.unit));
   document.getElementById('ugrid').innerHTML = UNITS.map(u => {
-    const cls = unitSet.has(u) ? 'ubadge done' : 'ubadge';
+    const cls = filledUnits.has(u) ? 'ubadge done' : 'ubadge';
     return '<span class="' + cls + '">' + u + '</span>';
   }).join('');
+  // Pending (not-yet-updated) list
+  const pendingUnits = UNITS.filter(u => !filledUnits.has(u));
+  document.getElementById('pendingList').textContent = pendingUnits.length ? '未更新：' + pendingUnits.join('、') : '已全部更新 ✓';
 
   if (!todayEntries.length) {
     list.innerHTML = '<div class="empty"><div class="em">📭</div>还没有记录</div>';
@@ -615,7 +620,7 @@ function fallbackClipboard(target) {
 // AUTO FILL: 从粘贴的文本自动识别 单位 / 运维项数 / 检修项数
 // ═════════════════════════════════
 var UNIT_PATTERNS = [
-  { u: '输变电运检中心', re: /输变电/ },
+  { u: '输电运检中心', re: /输变电/ },
   { u: '仁寿公司', re: /仁寿公司/ },
   { u: '洪雅公司', re: /洪雅公司/ },
   { u: '彭山公司', re: /彭山公司/ },
@@ -739,6 +744,11 @@ function simpleJoinItems(text) {
   t = t.replace(/.{0,6}工作完成情况[：:]?\s*/g, '');
   t = t.replace(/.{0,10}公司\d+月\d+日完成情况[：:]?\s*/g, '');
 
+  // 公司/单位 + 输电专业/运维/检修等 + 日期 + 完成情况/完成工作（如：仁寿公司输电专业9月15日完成情况：）
+  t = t.replace(/[^\n]{0,15}(?:公司|输电运检中心|输电运检班|运检中心|运检班)[^：:\n]{0,15}?\d+月\d+日[^：:\n]{0,15}完成(?:情况|工作|作业情况)[：:]?\s*/g, '');
+  // 公司/单位 + 今日/今天/今 + …完成情况/完成工作/完成作业情况（无日期）
+  t = t.replace(/[^\n]{0,15}(?:公司|输电运检中心|输电运检班|运检中心|运检班)(?:今日|今天|今)[^：:\n]{0,15}完成(?:情况|工作|作业情况)[：:]?\s*/g, '');
+
   // Split by numbered items (1. / 1、/ 1）etc.) → ；
   // At start of text
   t = t.replace(/^\s*\d+[.、．)）]\s*/g, '');
@@ -763,6 +773,14 @@ function simpleJoinItems(text) {
 
   // ── # 后自动加小空格（如 1#一18#塔 → 1# 一18# 塔）
   t = t.replace(/#(?=[^\s])/g, '# ');
+
+  // ── 去重：报告里若既有编号明细又有"主要工作是：…"汇总，去掉重复条目
+  var parts = t.split(/[；;]/).map(function(s){ return s.trim(); }).filter(Boolean);
+  var seen = {}, uniq = [];
+  for (var i = 0; i < parts.length; i++) {
+    if (!seen[parts[i]]) { seen[parts[i]] = 1; uniq.push(parts[i]); }
+  }
+  t = uniq.join('；');
 
   return t;
 }
@@ -819,7 +837,7 @@ function buildSummary() {
 
       // Simple join: split by numbered items, keep content as-is
       let content = (e.content || '').trim();
-      content = content.replace(/^主要工作是[：:]/, '').replace(/^主要内容是[：:]/, '');
+      content = content.replace(/主要工作是[：:]/g, '').replace(/主要内容是[：:]/g, '');
       content = simpleJoinItems(content);
 
       if (!content) {
