@@ -34,7 +34,7 @@ body {
 }
 .card-hd .n { font-size: 11px; font-weight: 400; color: var(--sub); margin-left: auto; }
 
-/* form */
+
 .fg { margin-bottom: 10px; }
 .fg:last-child { margin-bottom: 0; }
 .fl { display: block; font-size: 12px; font-weight: 600; color: var(--sub); margin-bottom: 3px; }
@@ -49,18 +49,18 @@ body {
   background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px;
 }
 
-/* row */
+
 .row { display: flex; gap: 8px; }
 .row > * { flex: 1; }
 
-/* section divider */
+
 .sec { border: 1.5px solid var(--line); border-radius: var(--r); padding: 10px 12px; margin-bottom: 10px; }
 .sec-hd { font-size: 13px; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
 .sec-hd .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
 .dot.yw { background: var(--blue); }
 .dot.jx { background: var(--orange); }
 
-/* btns */
+
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 4px;
   padding: 10px 18px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600;
@@ -75,7 +75,7 @@ body {
 .btns { display: flex; gap: 8px; margin-top: 10px; }
 .btns .btn { flex: 1; }
 
-/* unit tags */
+
 .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 4px; }
 .tag {
   padding: 5px 10px; border-radius: 14px; font-size: 12px; border: 1.5px solid var(--line);
@@ -85,10 +85,10 @@ body {
 .tag.on { background: var(--blue); color: #fff; border-color: var(--blue); }
 .tag.filled { background: #e6f4ea; color: var(--green); border-color: var(--green); }
 
-<!-- image styles removed -->
 
 
-/* entry list */
+
+
 .elist { max-height: 320px; overflow-y: auto; }
 .eitem { display: flex; align-items: flex-start; gap: 8px; padding: 9px 0; border-bottom: 1px solid #f0f0f0; }
 .eitem:last-child { border: none; }
@@ -97,13 +97,13 @@ body {
 .edetail { font-size: 13px; color: #555; line-height: 1.6; }
 .edel { background: #f0f0f0; border: 1px solid #ddd; color: #d93025; font-size: 13px; font-weight: 600; cursor: pointer; padding: 8px 12px; flex-shrink: 0; min-width: 48px; min-height: 36px; border-radius: 6px; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 
-/* unit grid */
+
 .ugrid { display: flex; flex-wrap: wrap; gap: 4px; }
 .ubadge { font-size: 11px; padding: 3px 8px; border-radius: 10px; background: #f0f0f0; color: #999; }
 .ubadge.done { background: #e6f4ea; color: #188038; }
 .pending { font-size: 12px; color: var(--sub); margin-top: 8px; }
 
-/* summary & live */
+
 .sbox, .live-box {
   background: #fafafa; border: 1px solid #e0e0e0; border-radius: var(--r);
   padding: 14px; font-size: 14px; line-height: 1.8;
@@ -112,7 +112,7 @@ body {
 .sbox.empty, .live-box.empty { color: #bbb; text-align: center; padding: 35px 14px; }
 .live-box { background: #fffef5; border-color: #e8e0c0; font-size: 13px; margin-top: 8px; }
 
-/* review panel */
+
 .review-box {
   background: #fff; border: 1.5px solid #ddd; border-radius: var(--r);
   padding: 10px 12px; font-size: 14px; line-height: 1.8;
@@ -129,10 +129,10 @@ body {
 .issue.err  { background: #fce8e6; color: #d93025; }
 .issue.ok   { background: #e6f4ea; color: #188038; }
 
-<!-- viewer styles removed -->
 
 
-/* toast */
+
+
 .toast {
   position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%);
   background: #333; color: #fff; padding: 8px 20px; border-radius: 18px;
@@ -156,28 +156,14 @@ body.embedded .top { display:none; }
 
 <div class="wrap">
 
-<!-- ══ 日期 ══ -->
 <div class="card">
   <div class="row">
-    <div class="fg">
+    <div class="fg" style="flex:1.4;">
       <label class="fl">汇总日期</label>
       <input type="date" class="fi" id="date" onchange="onDateChange()">
     </div>
-  </div>
-</div>
-
-<!-- ══ 录入 ══ -->
-<div class="card">
-  <div class="card-hd">✍️ <span id="formTitle">添加单位报告</span></div>
-
-  <div class="fg" style="display:none;">
-    <label class="fl">报送单位</label>
-    <div class="tags" id="unitTags"></div>
-  </div>
-
-  <div class="row">
     <div class="fg">
-      <label class="fl">运维计划项数</label>
+      <label class="fl">运维计划数</label>
       <select class="fi" id="ywCount">
         <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
         <option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
@@ -188,7 +174,7 @@ body.embedded .top { display:none; }
       </select>
     </div>
     <div class="fg">
-      <label class="fl">检修计划项数</label>
+      <label class="fl">检修计划数</label>
       <select class="fi" id="jxCount">
         <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
         <option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
@@ -199,20 +185,19 @@ body.embedded .top { display:none; }
       </select>
     </div>
   </div>
-
-  <div class="fg">
-    <label class="fl">📝 粘贴该单位工作内容（一整段）</label>
-    <button class="btn btn2" type="button" onclick="readClipboard()" style="margin-bottom:4px;width:100%;">📋 读取剪贴板（自动填入）</button>
-    <textarea class="ft" id="fullText" placeholder="直接粘贴县公司发来的整段报告文字...&#10;&#10;例如：&#10;运维计划4项，主要工作是：35东五线等精细化飞巡与红外测温；苏铁一二线保电特巡；先青二线等2条线路跨高铁视频加装。"></textarea>
-  </div>
-
-  <button class="btn btn1" id="btnSubmit" onclick="submitEntry()" style="margin-top:6px;">
-    ✅ 添加此单位报告
-  </button>
-  <button class="btn btn3" id="btnCancel" onclick="cancelEdit()" style="display:none;margin-top:6px;width:100%;">取消编辑</button>
 </div>
 
-<!-- ══ 已收集 ══ -->
+<div class="card">
+  <div class="fg">
+    <button class="btn btn2" type="button" onclick="readClipboard()" style="margin-bottom:4px;width:100%;">📋 读取剪贴板（自动填入）</button>
+    <textarea class="ft" id="fullText" placeholder="直接粘贴县公司发来的整段报告文字...&#10;&#10;例如：&#10;运维计划4项，主要工作是：35东五线等精细化飞巡与红外测温；苏铁一二线保电特巡；先青二线等2条线路跨高铁视频加装。"></textarea
+  </div>
+</div>
+
+<div style="display:none;">
+  <div class="tags" id="unitTags"></div>
+</div>
+
 <div class="card">
   <div class="card-hd">
     📋 今日已收集
@@ -229,18 +214,18 @@ body.embedded .top { display:none; }
   </div>
 </div>
 
-<!-- ══ 实时预览 ══ -->
+
 <div class="card">
   <div class="card-hd">👁️ 实时预览</div>
   <div class="live-box empty" id="liveBox">暂未填写内容</div>
 </div>
 
-<!-- ══ 正式输出 + 复核 ══ -->
+
 <div class="card">
   <div class="card-hd">📄 生成公文</div>
   <button class="btn btn1" onclick="genReview()" style="margin-bottom:10px;">📝 生成公文格式总结</button>
 
-  <!-- 复核结果 -->
+  
   <div id="reviewPanel" style="display:none;">
     <div class="card-hd" style="margin-top:0;">🔍 语法标点复核 <span class="n" id="reviewCount"></span></div>
     <div class="issues" id="issues"></div>
@@ -257,9 +242,12 @@ body.embedded .top { display:none; }
 <div class="toast" id="toast" style="display:none;"></div>
 
 <script>
-// ═════════════════════════════════
-// CONFIG
-// ═════════════════════════════════
+
+
+
+
+
+
 const UNITS = [
   '输电运检中心',
   '仁寿公司',
@@ -270,13 +258,19 @@ const UNITS = [
   '多能公司',
 ];
 const KEY = 'hz_v4';
-let entries = [];        // [{id, date, unit, ywCount, jxCount, content, ts}]
-let editingId = null;   // non-null = editing existing entry
-let manualCounts = false; // true = user manually set 运维/检修 counts; don't auto-overwrite
+let entries = [];        
 
-// ═════════════════════════════════
-// UNIT TAGS
-// ═════════════════════════════════
+let editingId = null;   
+
+let manualCounts = false; 
+
+
+
+
+
+
+
+
 function buildTags() {
   const tags = document.getElementById('unitTags');
   tags.innerHTML = UNITS.map(u =>
@@ -287,7 +281,8 @@ buildTags();
 
 function refreshTags() {
   const today = document.getElementById('date').value;
-  // Only mark as filled if user actually added content or non-zero counts
+  
+
   const filled = new Set(entries.filter(e =>
     e.date === today && (e.content || e.ywCount > 0 || e.jxCount > 0)
   ).map(e => e.unit));
@@ -307,7 +302,8 @@ function selectUnit(u) {
   const today = document.getElementById('date').value;
   let existing = entries.find(e => e.date === today && e.unit === u);
   if (!existing) {
-    // Create new placeholder entry for this unit
+    
+
     existing = {
       id: 'e_' + today + '_' + u.replace(/\s/g,''),
       date: today, unit: u,
@@ -324,14 +320,9 @@ function selectUnit(u) {
 function loadEntry(e) {
   editingId = e.id;
   manualCounts = false;
-  document.getElementById('formTitle').textContent = '✏️ 编辑：' + e.unit;
   document.getElementById('ywCount').value = e.ywCount || 0;
   document.getElementById('jxCount').value = e.jxCount || 0;
   document.getElementById('fullText').value = e.content || '';
-  const btn = document.getElementById('btnSubmit');
-  btn.textContent = '💾 更新此单位报告';
-  btn.classList.add('edit');
-  document.getElementById('btnCancel').style.display = 'block';
   refreshTags();
   document.getElementById('unitTags').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -339,17 +330,13 @@ function loadEntry(e) {
 function resetForm(selUnit) {
   editingId = null;
   manualCounts = false;
-  document.getElementById('formTitle').textContent = '✍️ 添加单位报告';
   document.getElementById('ywCount').value = '0';
   document.getElementById('jxCount').value = '0';
   document.getElementById('fullText').value = '';
-  const btn = document.getElementById('btnSubmit');
-  btn.textContent = '✅ 添加此单位报告';
-  btn.classList.remove('edit');
-  document.getElementById('btnCancel').style.display = 'none';
   if (selUnit) {
     refreshTags();
-    // Mark the selected tag
+    
+
     const tag = document.getElementById('tag_' + selUnit.replace(/\s/g,''));
     if (tag) tag.classList.add('on');
   } else {
@@ -362,15 +349,19 @@ function cancelEdit() {
   toast('已取消编辑');
 }
 
-// ═════════════════════════════════
-// SUBMIT
-// ═════════════════════════════════
+
+
+
+
+
+
 async function submitEntry() {
   const date = document.getElementById('date').value;
   if (!date) { toast('请选择日期'); return; }
   if (!editingId) { toast('请先粘贴文本，自动识别单位后再提交'); return; }
 
-  // If no unit from editingId (shouldn't happen), check
+  
+
   const entry = entries.find(e => e.id === editingId);
   if (!entry) { toast('编辑状态异常，请重新选择'); return; }
 
@@ -393,7 +384,8 @@ async function submitEntry() {
 }
 
 function doSubmit(entry, ywCount, jxCount, fullText) {
-  // Update entry
+  
+
   entry.ywCount = ywCount;
   entry.jxCount = jxCount;
   entry.content = fullText;
@@ -403,9 +395,12 @@ function doSubmit(entry, ywCount, jxCount, fullText) {
   toast('已更新 ' + entry.unit);
 }
 
-// ═════════════════════════════════
-// RENDER LIST
-// ═════════════════════════════════
+
+
+
+
+
+
 function render() {
   const today = document.getElementById('date').value;
   const todayEntries = entries.filter(e => e.date === today);
@@ -416,13 +411,15 @@ function render() {
   const tJ = todayEntries.reduce((s,e) => s + (e.jxCount || 0), 0);
   document.getElementById('cntTot').textContent = (todayEntries.length ? '｜合计：运维' + tY + '项、检修' + tJ + '项、共' + (tY + tJ) + '项' : '');
 
-  // Unit grid: green only for actually-filled units
+  
+
   const filledUnits = new Set(todayEntries.filter(e => e.content || e.ywCount > 0 || e.jxCount > 0).map(e => e.unit));
   document.getElementById('ugrid').innerHTML = UNITS.map(u => {
     const cls = filledUnits.has(u) ? 'ubadge done' : 'ubadge';
     return '<span class="' + cls + '">' + u + '</span>';
   }).join('');
-  // Pending (not-yet-updated) list
+  
+
   const pendingUnits = UNITS.filter(u => !filledUnits.has(u));
   document.getElementById('pendingList').textContent = pendingUnits.length ? '未更新：' + pendingUnits.join('、') : '已全部更新 ✓';
 
@@ -454,7 +451,8 @@ function render() {
 function del(id) {
   const entry = entries.find(e => e.id === id);
   if (!entry) return;
-  // Save backup for undo
+  
+
   const bak = { yw: entry.ywCount, jx: entry.jxCount, c: entry.content };
   entry.ywCount = 0;
   entry.jxCount = 0;
@@ -465,7 +463,8 @@ function del(id) {
     document.getElementById('fullText').value = '';
   }
   save(); render(); updateLive();
-  // Undo button via toast
+  
+
   showUndo(id, bak);
 }
 
@@ -473,7 +472,8 @@ function clearAll() {
   myConfirm('确定要清空今天全部单位的报告吗？此操作可撤销。', function(ok) {
     if (!ok) return;
     const today = document.getElementById('date').value;
-    // Save backup for undo
+    
+
     const bak = entries.filter(e => e.date === today).map(e => ({ id: e.id, yw: e.ywCount, jx: e.jxCount, c: e.content }));
     for (const e of entries) {
       if (e.date === today) {
@@ -522,12 +522,16 @@ function showUndoAll(today, bak) {
   });
 }
 
-// ═════════════════════════════════
-// DATE CHANGE
-// ═════════════════════════════════
+
+
+
+
+
+
 function onDateChange() {
   resetForm(null);
-  // Ensure units exist for the new date
+  
+
   const today = document.getElementById('date').value;
   const todayEntries = entries.filter(e => e.date === today);
   const todayUnits = new Set(todayEntries.map(e => e.unit));
@@ -548,9 +552,12 @@ function onDateChange() {
   document.getElementById('reviewBox').value = '';
 }
 
-// ═════════════════════════════════
-// CLIPBOARD READ: 一键读取剪贴板填入内容框
-// ═════════════════════════════════
+
+
+
+
+
+
 function readClipboard() {
   var target = document.getElementById('fullText');
   if (!target) return;
@@ -588,7 +595,6 @@ function fallbackClipboard(target) {
   ta.setAttribute('placeholder', '粘贴后自动填入并关闭');
   ta.style.cssText = 'width:100%;min-height:120px;box-sizing:border-box;font-size:15px;';
   var btn = document.createElement('button');
-  btn.textContent = '取消';
   btn.className = 'btn btn3';
   btn.style.cssText = 'margin-top:8px;width:100%;';
   box.appendChild(title); box.appendChild(ta); box.appendChild(btn);
@@ -616,9 +622,12 @@ function fallbackClipboard(target) {
   toast('此浏览器不能直接读取，请长按粘贴一次');
 }
 
-// ═════════════════════════════════
-// AUTO FILL: 从粘贴的文本自动识别 单位 / 运维项数 / 检修项数
-// ═════════════════════════════════
+
+
+
+
+
+
 var UNIT_PATTERNS = [
   { u: '输电运检中心', re: /输电运检/ },
   { u: '仁寿公司', re: /仁寿公司/ },
@@ -682,10 +691,6 @@ function autoFillFromText() {
       box.value = keep;
     }
     editingId = entry.id;
-    document.getElementById('formTitle').textContent = '✏️ 编辑：' + unit;
-    document.getElementById('btnSubmit').textContent = '💾 更新此单位报告';
-    document.getElementById('btnSubmit').classList.add('edit');
-    document.getElementById('btnCancel').style.display = 'block';
   }
 
   var c = detectCounts(text);
@@ -726,17 +731,22 @@ document.getElementById('jxCount').addEventListener('change', function() {
   }
 });
 
-// ═════════════════════════════════
-// SIMPLE JOIN: split by numbered items, keep content unchanged, join with ；
-// ═════════════════════════════════
+
+
+
+
+
+
 function simpleJoinItems(text) {
   if (!text || !text.trim()) return '';
   var t = text.trim();
 
-  // Remove section headers (一、二、三、…)
+  
+
   t = t.replace(/^[一二三四五六七八九十]、[^\n]*[\n\r]+/gm, '');
 
-  // Remove date/company headers (with or without colon)
+  
+
   t = t.replace(/.{0,12}\d+月\d+日.{0,12}(?:工作|运维|检修|输电).{0,10}[：:]?\s*/g, '');
   t = t.replace(/.{0,10}公司(?:今日|今天|今)(?:完成作业情况|完成工作|运维工作完成情况|输电工作完成情况|输电专业工作完成情况)[：:]?\s*/g, '');
   t = t.replace(/.{0,10}公司\d+月\d+日[^\n]{0,20}[：:]?\s*/g, '');
@@ -744,37 +754,49 @@ function simpleJoinItems(text) {
   t = t.replace(/.{0,6}工作完成情况[：:]?\s*/g, '');
   t = t.replace(/.{0,10}公司\d+月\d+日完成情况[：:]?\s*/g, '');
 
-  // 公司/单位 + 输电专业/运维/检修等 + 日期 + 完成情况/完成工作（如：仁寿公司输电专业9月15日完成情况：）
+  
+
   t = t.replace(/[^\n]{0,15}(?:公司|输电运检中心|输电运检班|运检中心|运检班)[^：:\n]{0,15}?\d+月\d+日[^：:\n]{0,15}完成(?:情况|工作|作业情况)[：:]?\s*/g, '');
-  // 公司/单位 + 今日/今天/今 + …完成情况/完成工作/完成作业情况（无日期）
+  
+
   t = t.replace(/[^\n]{0,15}(?:公司|输电运检中心|输电运检班|运检中心|运检班)(?:今日|今天|今)[^：:\n]{0,15}完成(?:情况|工作|作业情况)[：:]?\s*/g, '');
 
-  // Split by numbered items (1. / 1、/ 1）etc.) → ；
-  // At start of text
+  
+
+  
+
   t = t.replace(/^\s*\d+[.、．)）]\s*/g, '');
-  // After newlines
+  
+
   t = t.replace(/[\n\r]+\s*\d+[.、．)）]\s*/g, '；');
-  // Split by "一是""二是" → ；
+  
+
   t = t.replace(/[\n\r]+\s*[一二三四五六七八九十]是\s*/g, '；');
-  // Remaining newlines → ；
+  
+
   t = t.replace(/[\n\r]+/g, '；');
 
-  // Remove trailing 。 at each point end (e.g. “…飞巡。”→“…飞巡”)
+  
+
   t = t.replace(/。+\s*[；;]/g, '；');
   t = t.replace(/。+\s*$/g, '');
 
-  // Clean up
+  
+
   t = t.replace(/^[；;，,\s]+/, '');
   t = t.replace(/[；;，,\s]+$/, '');
 
-  // ── kV 修正：所有 KV/kv/Kv/kV 变体统一为 kV（如 220KV → 220kV）
+  
+
   t = t.replace(/(\d+)千伏/g, '$1kV');
   t = t.replace(/(\d+)\s*[Kk][Vv]/g, '$1kV');
 
-  // ── # 后自动加小空格（如 1#一18#塔 → 1# 一18# 塔）
+  
+
   t = t.replace(/#(?=[^\s])/g, '# ');
 
-  // ── 去重：报告里若既有编号明细又有"主要工作是：…"汇总，去掉重复条目
+  
+
   var parts = t.split(/[；;]/).map(function(s){ return s.trim(); }).filter(Boolean);
   var seen = {}, uniq = [];
   for (var i = 0; i < parts.length; i++) {
@@ -785,9 +807,12 @@ function simpleJoinItems(text) {
   return t;
 }
 
-// ═════════════════════════════════
-// BUILD SUMMARY
-// ═════════════════════════════════
+
+
+
+
+
+
 function buildSummary() {
   const today = document.getElementById('date').value;
   if (!today) return '请先选择日期';
@@ -796,7 +821,8 @@ function buildSummary() {
 
   const todayEntries = entries.filter(e => e.date === today);
 
-  // Aggregate totals
+  
+
   let totalYw = 0, totalJx = 0;
   const map = {};
   for (const e of todayEntries) {
@@ -806,7 +832,8 @@ function buildSummary() {
   }
   const total = totalYw + totalJx;
 
-  // ── First line: date + totals
+  
+
   let out = '';
   out += dateStr + '，输电专业运维检修计划' + total + '项';
   if (totalYw > 0 && totalJx > 0) {
@@ -820,7 +847,8 @@ function buildSummary() {
   }
   out += '。\n';
 
-  // ── Per-unit entries
+  
+
   let idx = 1;
   for (const u of UNITS) {
     const e = map[u];
@@ -832,10 +860,12 @@ function buildSummary() {
       let descs = [];
       if (e.ywCount > 0) descs.push('运维计划' + e.ywCount + '项');
       if (e.jxCount > 0) descs.push('检修计划' + e.jxCount + '项');
-      // Connection word: 纯检修用"主要内容是"，否则用"主要工作是"
+      
+
       let conn = (e.jxCount > 0 && e.ywCount === 0) ? '，主要内容是：' : '，主要工作是：';
 
-      // Simple join: split by numbered items, keep content as-is
+      
+
       let content = (e.content || '').trim();
       content = content.replace(/主要工作是[：:]/g, '').replace(/主要内容是[：:]/g, '');
       content = simpleJoinItems(content);
@@ -852,23 +882,29 @@ function buildSummary() {
   return out;
 }
 
-// ═════════════════════════════════
-// REVIEW ENGINE
-// ═════════════════════════════════
+
+
+
+
+
+
 function runChecks(text) {
   const issues = [];
 
-  // 1. English punctuation in Chinese text
+  
+
   if (/[^0-9],(?!\d)/.test(text)) issues.push({ t:'warn', m:'疑似英文逗号 , 应为中文逗号 ，' });
   if(/[^0-9]\.(?=\s|$|\n)/.test(text) && !/项\./.test(text)) issues.push({ t:'warn', m:'疑似英文句号 . 应为中文句号 。' });
   if(/;(?!\s*\d)/.test(text)) issues.push({ t:'warn', m:'疑似英文分号 ; 应为中文分号 ；' });
 
-  // 2. Double punctuation
+  
+
   if(/。。/.test(text)) issues.push({ t:'err', m:'发现双句号 。。' });
   if(/；；/.test(text)) issues.push({ t:'err', m:'发现双分号 ；；' });
   if(/，，/.test(text)) issues.push({ t:'err', m:'发现双逗号 ，，' });
 
-  // 3. Missing period at end of per-unit lines
+  
+
   const lines = text.split('\n').filter(l => l.trim());
   for (let i = 0; i < lines.length; i++) {
     const l = lines[i].trim();
@@ -879,7 +915,8 @@ function runChecks(text) {
     }
   }
 
-  // 4. Check numbering consistency
+  
+
   let prevNum = 0;
   for (const l of lines) {
     const m = l.match(/^(\d+)、/);
@@ -892,7 +929,8 @@ function runChecks(text) {
     }
   }
 
-  // 5. Template required elements
+  
+
   if (!/输电专业/.test(text)) issues.push({ t:'warn', m:'第一行应包含"输电专业运维检修计划"' });
   if (!/其中运维计划.*检修计划/.test(text) && !/均为运维计划/.test(text) && !/均为检修计划/.test(text)) {
     if (/检修计划\d+项/.test(text) && /运维计划\d+项/.test(text)) {
@@ -900,7 +938,8 @@ function runChecks(text) {
     }
   }
 
-  // 6. Unit count check - list missing units
+  
+
   if (!/无运维检修计划/.test(text)) {
     const unitMatches = text.match(/\d+、(\S+?)(?:运维|检修|：)/g) || [];
     const foundUnits = unitMatches.map(m => m.replace(/^\d+、/, '').replace(/(?:运维|检修|：).*$/, ''));
@@ -908,27 +947,33 @@ function runChecks(text) {
     if (missingUnits.length > 0) {
       issues.push({ t:'err', m:'缺少单位：' + missingUnits.join('、') });
     }
-    // Also check total count
+    
+
     const unitCount = (text.match(/\d+、/g) || []).length;
     if (unitCount < 7) issues.push({ t:'warn', m:'只找到' + unitCount + '个单位编号，应有7个' });
   }
 
-  // 7. Empty content check
+  
+
   if (/主要工作是：\s*[。；;]/.test(text)) issues.push({ t:'err', m:'"主要工作是："后内容为空' });
   if (/主要内容是：\s*[。；;]/.test(text)) issues.push({ t:'err', m:'"主要内容是："后内容为空' });
 
-  // 8. 【新增】检测残留的杆塔号
+  
+
   if (/\d+#/.test(text)) issues.push({ t:'warn', m:'可能残留杆塔号（#号）' });
 
-  // 9. 【新增】检测残留的英文标点
+  
+
   if (/[一-鿿]\s*,\s*[一-鿿]/.test(text)) issues.push({ t:'warn', m:'中文文本中出现英文逗号' });
 
-  // 10. 【新增】检测未处理的中式编号
+  
+
   if (/[一二三四五六七八九十]、/.test(text)) {
     issues.push({ t:'warn', m:'可能残留中式章节标题（一、二、…）' });
   }
 
-  // Final: OK if no issues
+  
+
   if (!issues.length) {
     issues.push({ t:'ok', m:'未发现明显语法标点问题 ✓' });
   }
@@ -936,12 +981,14 @@ function runChecks(text) {
   return issues;
 }
 
-// ── Smart merge: globally group same work type, then "A线等N条线路workType"
+
+
 function mergeLines(text) {
   let parts = text.split(/[；;]/).map(p => p.trim()).filter(p => p);
   if (parts.length <= 1) return text;
 
-  // Step 1: parse each part into { lines[], workType }
+  
+
   let items = [];
   for (let p of parts) {
     let r = countLinesInPart(p);
@@ -952,7 +999,8 @@ function mergeLines(text) {
     }
   }
 
-  // Step 2: global merge - group items with identical work type
+  
+
   let groups = [];
   let used = new Set();
   for (let i = 0; i < items.length; i++) {
@@ -969,12 +1017,14 @@ function mergeLines(text) {
       }
     }
     used.add(i);
-    // Deduplicate lines
+    
+
     allLines = [...new Set(allLines)];
     groups.push({ count: allLines.length, firstLine: firstLine, work: item.work });
   }
 
-  // Step 3: format output
+  
+
   let out = [];
   for (let g of groups) {
     if (g.raw) { out.push(g.raw); }
@@ -984,10 +1034,13 @@ function mergeLines(text) {
   return out.join('；');
 }
 
-// Common work type suffixes to help identify end of line names
-// Sorted by length descending for greedy matching
+
+
+
+
 var WORK_TYPES = [
-  // 巡视类
+  
+
   '可视化常规巡视及外破点监控巡视',
   '电网风险保电特殊巡视',
   '特殊区段震后特巡',
@@ -997,22 +1050,27 @@ var WORK_TYPES = [
   '故障特巡', '特殊巡视',
   '可视化巡视', '外破点位可视化巡视', '外破监控',
   '外破点位特巡',
-  // 飞巡类
+  
+
   '无人机精细化飞巡', '无人机可见光故障排查',
   '精细化飞巡', '自主飞巡', '故障飞巡',
   '飞巡', '故障排查', '可见光故障排查',
-  // 检测/扫描
+  
+
   '热成像及声控成像检测', '激光雷达扫描', '激光扫描',
   '无人机红外测温', '无人机红外',
   '红外测温', '接地测试', '接地检测', '数据分析',
-  // 通道/接地/清障
+  
+
   '通道处理', '接地整治', '接地网整治', '接地治理',
   '清障砍伐', '清障',
-  // 加装/改造
+  
+
   '安装在线视频装置', '安装视频装置', '视频加装',
   '避雷器加装', '加装避雷器',
   '导轨安装', '导轨、避雷器安装',
-  // 检修/工程类
+  
+
   '电缆沟盖板消缺', '导地线更换',
   '悬垂线夹更换',
   '跨越架拆除', '场地清理',
@@ -1021,32 +1079,39 @@ var WORK_TYPES = [
   '抱杆提升', '导地线展放', '展放',
   '跨高速封网', '跨高速断道封网',
   '起地锚', '临时处置',
-  // 消缺/验收/其他
+  
+
   '隐患处理', '验收', '消缺',
   '抽水', '异物隐患',
   '引流线安装',
 ];
 
-// ── Expand compound line names: 铁镇一二线 → ['铁镇一线','铁镇二线']
+
+
 function expandLines(name) {
-  // Match: prefix + Chinese digit + Chinese digit + 线
-  // e.g., 铁镇一二线, 青白三四线
+  
+
+  
+
   var cnDigits = '一二三四五六七八九十';
   var re = new RegExp('^(\\S+?)([' + cnDigits + '])([' + cnDigits + '])(线)$');
   var m = name.match(re);
   if (m && m[2] !== m[3]) {
     return [m[1] + m[2] + m[4], m[1] + m[3] + m[4]];
   }
-  // Check for single digit prefix like 东平一线, 江东二线
+  
+
   var re2 = /^(\S+?)([一二三四五六七八九十])(线)$/;
   var m2 = name.match(re2);
   if (m2) {
-    return [name]; // not compound, just one line
+    return [name]; 
+
   }
   return [name];
 }
 
-// Given a list of line names, expand compounds and deduplicate
+
+
 function expandAndDedup(lines) {
   var result = [];
   var seen = new Set();
@@ -1062,17 +1127,22 @@ function expandAndDedup(lines) {
   return result;
 }
 
-// ── Test if a string looks like a valid line name (not a description phrase)
+
+
 function isLineName(s) {
   if (!s || s.length < 2 || s.length > 20) return false;
-  // Must end with 线
+  
+
   if (!/线$/.test(s)) return false;
-  // Exclude common false positives
+  
+
   var exclude = /^(等\d+条线路|线路巡视|线路通道|线路运行|线路迁改|输电线路|停运|单线|导地线|地线)/;
   if (exclude.test(s)) return false;
-  // Must contain Chinese characters (or kV prefix with Chinese)
+  
+
   if (!/[一-鿿]/.test(s) && !/\d+kV/i.test(s)) return false;
-  // Allow 及 (e.g., 文青线及桂林支线), 支线, 进线 as part of compound names
+  
+
   return true;
 }
 
@@ -1081,11 +1151,14 @@ function countLinesInPart(p) {
   let firstLine = '';
   let after = p;
 
-  // ── Step 1: find the first line name (with or without kV prefix)
-  // Use [^、，,；;\s] to avoid greedy match crossing separators
+  
+
+  
+
   let fm = p.match(/(\d+kV[^、，,；;\s]{1,12}线)/);
   if (!fm) {
-    // Try bare line name: non-kV prefixed, 2-8 chars before 线 that looks like a name
+    
+
     fm = p.match(/([一-鿿A-Za-z0-9][^、，,；;\s]{1,10}线)/);
   }
   if (!fm) return { count: 0, firstLine: '', workDesc: p, allLines: [] };
@@ -1096,7 +1169,8 @@ function countLinesInPart(p) {
   }
   after = p.substring(fm.index + fm[0].length);
 
-  // ── Step 2: find the earliest matching work type
+  
+
   let workDesc = '';
   let workMatch = null;
   for (let wi = 0; wi < WORK_TYPES.length; wi++) {
@@ -1107,41 +1181,51 @@ function countLinesInPart(p) {
     }
   }
   if (workMatch) {
-    // Everything before the work type is potential line names
+    
+
     let linePart = after.substring(0, workMatch.idx);
     workDesc = after.substring(workMatch.idx);
-    // ── Parse line names from linePart
-    // Split by common separators
+    
+
+    
+
     let segs = linePart.split(/[、，,]+/);
     for (let si = 0; si < segs.length; si++) {
       let s = segs[si].trim();
       if (!s) continue;
-      // Strip leading 完成/开展 prefix
+      
+
       s = s.replace(/^(?:完成|开展|进行|实施|及|对)/, '');
-      // Strip trailing descriptors
+      
+
       s = s.replace(/等线路$/, '').replace(/等$/, '').replace(/等\d+条线路$/, '');
       s = s.replace(/进线$/, '');
       if (!s) continue;
-      // Try kV-prefixed line (exclude separators)
+      
+
       let km = s.match(/(\d+kV[^、，,；;\s]{1,12}线)/);
       if (km) {
         if (!lines.includes(km[1])) lines.push(km[1]);
         continue;
       }
-      // Try bare line name
+      
+
       if (isLineName(s) && !lines.includes(s)) {
         lines.push(s);
       }
     }
   } else {
-    // ── Fallback: no known work type found, try to extract line names from entire after string
-    // Find all kV-prefixed lines
+    
+
+    
+
     let reKv = /(\d+kV[^、，,；;\s]{1,12}线)/g;
     let mKv;
     while ((mKv = reKv.exec(after)) !== null) {
       if (!lines.includes(mKv[1])) lines.push(mKv[1]);
     }
-    // Find all bare line names
+    
+
     let reBare = /([一-鿿A-Za-z\d]{2,8}线)/g;
     let mBare;
     while ((mBare = reBare.exec(after)) !== null) {
@@ -1150,7 +1234,8 @@ function countLinesInPart(p) {
         lines.push(cand);
       }
     }
-    // The remainder is the work description
+    
+
     if (lines.length > 0) {
       let lastLine = lines[lines.length - 1];
       let lastIdx = after.lastIndexOf(lastLine);
@@ -1160,7 +1245,8 @@ function countLinesInPart(p) {
     }
   }
 
-  // ── Step 3: expand compound names and dedup
+  
+
   let allLines = expandAndDedup(lines);
   if (allLines.length > 0 && !firstLine) {
     firstLine = allLines[0];
@@ -1176,7 +1262,8 @@ function cleanWork(s) {
 }
 
 function sameWork(a, b) {
-  // Normalize for comparison: strip prefixes, strip trailing quantities (X基, X处, X条)
+  
+
   var norm = function(s) {
     return cleanWork(s)
       .replace(/\d+基\s*$/g, '')
@@ -1191,18 +1278,21 @@ function sameWork(a, b) {
   };
   var na = norm(a);
   var nb = norm(b);
-  // Exact match only — no modifier stripping
+  
+
   return na && nb && na === nb;
 }
 
 function autoFixText(text) {
   var t = text;
 
-  // ── kV 修正：所有 KV/kv/Kv/kV 变体统一为 kV（如 220KV → 220kV）
+  
+
   t = t.replace(/(\d+)千伏/g, '$1kV');
   t = t.replace(/(\d+)\s*[Kk][Vv]/g, '$1kV');
 
-  // ── 标点符号标准化
+  
+
   t = t.replace(/。。/g, '。');
   t = t.replace(/；；+/g, '；');
   t = t.replace(/，，+/g, '，');
@@ -1213,22 +1303,28 @@ function autoFixText(text) {
   t = t.replace(/；。/g, '。');
   t = t.replace(/：[；;，,]/g, '：');
 
-  // ── 常见错别字
+  
+
   t = t.replace(/精细化飞训/g, '精细化飞巡');
 
-  // ── # 后自动加小空格（如 1#一18#塔 → 1# 一18# 塔）
+  
+
   t = t.replace(/#(?=[^\s])/g, '# ');
 
-  // ── 清理首尾多余标点
+  
+
   t = t.replace(/^[；;，,、\s]+/, '');
   t = t.replace(/[；;，,、\s]+$/, '');
 
   return t;
 }
 
-// ═════════════════════════════════
-// LIVE + REVIEW + COPY
-// ═════════════════════════════════
+
+
+
+
+
+
 function updateLive() {
   const box = document.getElementById('liveBox');
   const today = document.getElementById('date').value;
@@ -1254,7 +1350,8 @@ function genReview() {
   reviewBox.value = text;
   panel.style.display = 'block';
 
-  // Run checks
+  
+
   const issues = runChecks(text);
   issuesDiv.innerHTML = issues.map(i =>
     '<span class="issue ' + i.t + '">' + (i.t==='err'?'❌':i.t==='warn'?'⚠️':'✅') + ' ' + i.m + '</span>'
@@ -1302,7 +1399,8 @@ function copyReview() {
   const issues = runChecks(t);
   const errs = issues.filter(i => i.t === 'err').length;
   const doCopy = function() {
-    // Method 1: Clipboard API
+    
+
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(t).then(function() {
         toast('已复制到剪贴板');
@@ -1323,7 +1421,8 @@ function copyReview() {
 }
 
 function selectAndCopy(box, t) {
-  // Method 2: Select text in existing textarea & execCommand
+  
+
   box.focus();
   box.select();
   box.setSelectionRange(0, 999999);
@@ -1333,17 +1432,23 @@ function selectAndCopy(box, t) {
       return;
     }
   } catch(e) {}
-  // Method 3: Let iOS show the copy popup naturally
-  // Text is already selected in the reviewBox, user just taps "拷贝"
+  
+
+  
+
   toast('已选中文字，请轻点弹出菜单选"拷贝"');
 }
 
-// ═════════════════════════════════
-// STORAGE & UTILS
-// ═════════════════════════════════
+
+
+
+
+
+
 function load() {
   try { const s = localStorage.getItem(KEY); if (s) entries = JSON.parse(s); } catch(e) { entries = []; }
-  // Migrate old data format
+  
+
   for (const e of entries) {
     if (!('content' in e) && ('ywContent' in e || 'jxContent' in e)) {
       e.content = (e.ywContent || '') + (e.jxContent ? '；检修内容：' + e.jxContent : '');
@@ -1360,9 +1465,12 @@ function toast(m) {
   clearTimeout(t._tid); t._tid = setTimeout(() => t.style.display = 'none', 1800);
 }
 
-// ═════════════════════════════════
-// MY CONFIRM: 页面内自定义确认框（避免手机浏览器 confirm 失效）
-// ═════════════════════════════════
+
+
+
+
+
+
 function myConfirm(message, onOk) {
   if (document.getElementById('confirmOverlay')) return;
   var ov = document.createElement('div');
@@ -1387,17 +1495,22 @@ function myConfirm(message, onOk) {
   yes.onclick = function() { close(); if (onOk) onOk(true); };
 }
 
-// ═════════════════════════════════
-// INIT
-// ═════════════════════════════════
+
+
+
+
+
+
 (function() {
   const today = new Date().toISOString().slice(0,10);
   document.getElementById('date').value = today;
-  // Clean old version caches
+  
+
   try { localStorage.removeItem('hz_entries_v2'); } catch(e) {}
   try { localStorage.removeItem('hz_v3'); } catch(e) {}
   load();
-  // Ensure all 7 units have entries for today so user can click any to edit
+  
+
   const todayEntries = entries.filter(e => e.date === today);
   const todayUnits = new Set(todayEntries.map(e => e.unit));
   for (const u of UNITS) {
@@ -1413,7 +1526,8 @@ function myConfirm(message, onOk) {
   }
   save();
   render(); updateLive();
-  // Event delegation for entry list (handles delete + view image)
+  
+
   var elist = document.getElementById('elist');
   elist.addEventListener('click', function(e) {
     var btn = e.target.closest('[data-act]');
@@ -1431,7 +1545,8 @@ function myConfirm(message, onOk) {
     var eid = btn.getAttribute('data-eid');
     if (act === 'del') { del(eid); return; }
   }, {passive: false});
-  // Clear all button
+  
+
   var btnClr = document.getElementById('btnClr');
   btnClr.addEventListener('click', function(e) { e.preventDefault(); clearAll(); });
   btnClr.addEventListener('touchstart', function(e) { e.preventDefault(); clearAll(); }, {passive: false});
