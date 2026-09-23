@@ -737,6 +737,16 @@ document.getElementById('jxCount').addEventListener('change', function() {
 
 
 
+function isCompletionOnly(s) {
+  var raw = String(s == null ? '' : s).trim();
+  if (!raw) return true;
+  if (/^(以上|上述|如上|以下)(的工作|工作|各项|内容|情况)?[。.！!]?$/.test(raw)) return true;
+  if (!/完成|结束|已完|完毕|完结/.test(raw)) return false;
+  var x = raw.replace(/[\s。；;，,.、！!]/g, '')
+             .replace(/今日|今天|当日|本日|以上|上述|全部|所有|各项工作|各项|运维|检修|输电|专业|工作|任务|计划|其他|均|都|已|完成|结束|完毕|完结|情况/g, '');
+  return x === '';
+}
+
 function simpleJoinItems(text) {
   if (!text || !text.trim()) return '';
   var t = text.trim();
@@ -800,6 +810,7 @@ function simpleJoinItems(text) {
   var parts = t.split(/[；;]/).map(function(s){ return s.trim(); }).filter(Boolean);
   var seen = {}, uniq = [];
   for (var i = 0; i < parts.length; i++) {
+    if (isCompletionOnly(parts[i])) continue;
     if (!seen[parts[i]]) { seen[parts[i]] = 1; uniq.push(parts[i]); }
   }
   t = uniq.join('；');
